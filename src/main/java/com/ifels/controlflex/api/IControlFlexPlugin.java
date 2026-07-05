@@ -1,7 +1,5 @@
 package com.ifels.controlflex.api;
 
-import java.io.File;
-
 /**
  * SPI interface for bridge mods to integrate with ControlFlex.
  *
@@ -46,25 +44,22 @@ public interface IControlFlexPlugin {
      * {@code cfx-mod/} directory. ControlFlex calls this before
      * {@link #onControlFlexReady()}.
      *
-     * <p>Use {@link #installAsset} to copy files from this plugin's JAR:</p>
+     * <p>Use the provided {@link ICompatAssetInstaller} to install bundled assets:</p>
      * <pre>{@code
-     * installAsset(cfxModDir, "/assets/mymod/compat/epicfight_keys.json", "epicfight_keys.json");
+     * installer.install("/assets/mymod/compat/epicfight_keys.json", "epicfight_keys.json");
      * }</pre>
      *
-     * @param cfxModDir config/controlflex/compat/cfx-mod/ directory (guaranteed to exist)
+     * @param installer handles classpath lookup and file copy
      */
-    default void onInstallCompatConfigs(File cfxModDir) {}
+    default void onInstallCompatConfigs(ICompatAssetInstaller installer) {}
 
     /**
-     * Export guide configuration files from this bridge mod's JAR into the
-     * {@code cfx-mod/} directory. ControlFlex calls this before
-     * {@link #onControlFlexReady()}.
+     * Export guide configuration files from this bridge mod's JAR.
+     * Same pattern as {@link #onInstallCompatConfigs}.
      *
-     * <p>Same pattern as {@link #onInstallCompatConfigs}. Use {@link #installAsset}.</p>
-     *
-     * @param cfxModDir config/controlflex/guides/cfx-mod/ directory (guaranteed to exist)
+     * @param installer handles classpath lookup and file copy
      */
-    default void onInstallGuideAssets(File cfxModDir) {}
+    default void onInstallGuideAssets(ICompatAssetInstaller installer) {}
 
     /**
      * Convenience method: check whether the ControlFlex API version meets

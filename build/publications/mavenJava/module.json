@@ -27,11 +27,11 @@
         {
           "name": "controlflex-api-0.8.5.jar",
           "url": "controlflex-api-0.8.5.jar",
-          "size": 8888,
-          "sha512": "43073b6963e2893b7438b7f971c0bd8e8d6e9fbf35a2e0b1149880099dc77c63faa4e6e1b349bc67bc9b3311750d4be5b82f0468eb602633f3059375330aaa3c",
-          "sha256": "fae693149c16ae4d63950fe852084c608b8051989d50f125a00bd373794003f5",
-          "sha1": "089e57cc291fcfc3ff8c85be4ece66482c1d7d0d",
-          "md5": "7b1f56ac03d56dad1ac5cf7ce3a82768"
+          "size": 9226,
+          "sha512": "a6c4c6180e0cb80ee6172eb1b5fa315a84aca613e04411fb69e9ea7f827793abb925e06b746b46611cd252488e5ed650c9602bb79b51b701e3d31b34a0e553dd",
+          "sha256": "62b4fed8999a711d341618540fa2afb871e6b3f14d280a139855faa0d4687219",
+          "sha1": "3459461505b58bbb9e96883368106b2c9a46f970",
+          "md5": "11065d63b9738deba07b85d2b673384c"
         }
       ]
     },
@@ -48,11 +48,11 @@
         {
           "name": "controlflex-api-0.8.5.jar",
           "url": "controlflex-api-0.8.5.jar",
-          "size": 8888,
-          "sha512": "43073b6963e2893b7438b7f971c0bd8e8d6e9fbf35a2e0b1149880099dc77c63faa4e6e1b349bc67bc9b3311750d4be5b82f0468eb602633f3059375330aaa3c",
-          "sha256": "fae693149c16ae4d63950fe852084c608b8051989d50f125a00bd373794003f5",
-          "sha1": "089e57cc291fcfc3ff8c85be4ece66482c1d7d0d",
-          "md5": "7b1f56ac03d56dad1ac5cf7ce3a82768"
+          "size": 9226,
+          "sha512": "a6c4c6180e0cb80ee6172eb1b5fa315a84aca613e04411fb69e9ea7f827793abb925e06b746b46611cd252488e5ed650c9602bb79b51b701e3d31b34a0e553dd",
+          "sha256": "62b4fed8999a711d341618540fa2afb871e6b3f14d280a139855faa0d4687219",
+          "sha1": "3459461505b58bbb9e96883368106b2c9a46f970",
+          "md5": "11065d63b9738deba07b85d2b673384c"
         }
       ]
     },
@@ -68,11 +68,11 @@
         {
           "name": "controlflex-api-0.8.5-sources.jar",
           "url": "controlflex-api-0.8.5-sources.jar",
-          "size": 10282,
-          "sha512": "02fd3606cc82411f8b01f5deda41aacfb7776bb8f57da650c9075bae29f5784db67cfd92b733265c09a0d9271b6369a192d014ade57ea2fcb5feb5ef1d3cf357",
-          "sha256": "ddef02db19b60000d441abfbe006ce75140decb09bd881911f11296273121829",
-          "sha1": "cd1c9dc8f90f4a73853437b024d012918b4b391d",
-          "md5": "2707abb2f39a12681d9595cec6a86cd2"
+          "size": 10903,
+          "sha512": "c226e943662cf85a1e1db3a4843c5d4b1fcea0b172114e37dee8b16091cdface21e2ba810a964eb4709118f26145949ac736c257450b5b133eab35f0fea22c79",
+          "sha256": "a86db5cbb19079cb3f11454ab5f7eb7637a0135af5c329b5325a2f34fa915a82",
+          "sha1": "25410cb2d04ed935256ee95045577aaec67283f8",
+          "md5": "154df94fbf4fbafa3ba159406f614b5c"
         }
       ]
     }
