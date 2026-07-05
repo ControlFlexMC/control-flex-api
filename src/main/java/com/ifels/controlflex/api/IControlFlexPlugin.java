@@ -46,14 +46,9 @@ public interface IControlFlexPlugin {
      * {@code cfx-mod/} directory. ControlFlex calls this before
      * {@link #onControlFlexReady()}.
      *
-     * <p>The directory {@code config/controlflex/compat/cfx-mod/} is created
-     * and ready. Simply copy your JSON files there.</p>
-     *
+     * <p>Use {@link #installAsset} to copy files from this plugin's JAR:</p>
      * <pre>{@code
-     * InputStream is = getClass().getResourceAsStream(
-     *     "/assets/cfx_x_mymod/compat/epicfight_keys.json");
-     * Files.copy(is, new File(cfxModDir, "epicfight_keys.json").toPath(),
-     *     StandardCopyOption.REPLACE_EXISTING);
+     * installAsset(cfxModDir, "/assets/mymod/compat/epicfight_keys.json", "epicfight_keys.json");
      * }</pre>
      *
      * @param cfxModDir config/controlflex/compat/cfx-mod/ directory (guaranteed to exist)
@@ -65,8 +60,7 @@ public interface IControlFlexPlugin {
      * {@code cfx-mod/} directory. ControlFlex calls this before
      * {@link #onControlFlexReady()}.
      *
-     * <p>Same pattern as {@link #onInstallCompatConfigs} but for guide JSON.
-     * Files follow the same mod_id-based override semantics.</p>
+     * <p>Same pattern as {@link #onInstallCompatConfigs}. Use {@link #installAsset}.</p>
      *
      * @param cfxModDir config/controlflex/guides/cfx-mod/ directory (guaranteed to exist)
      */
