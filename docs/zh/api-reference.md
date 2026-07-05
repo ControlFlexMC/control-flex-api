@@ -123,7 +123,7 @@ ControlFlex 启动
 ```java
 boolean install(String resourcePath, String fileName)
 // resourcePath: classpath path e.g. "/assets/mymod/compat/epicfight_keys.json"
-// fileName:      target filename in cfx-mod/ directory
+// fileName:      target filename in mods/ directory
 // returns:       true if installed successfully
 ```
 

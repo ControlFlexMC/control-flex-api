@@ -3,7 +3,7 @@ package com.ifels.controlflex.api;
 /**
  * Installer passed to {@link IControlFlexPlugin} callbacks for exporting
  * compat and guide assets from the bridge mod's JAR into ControlFlex's
- * {@code cfx-mod/} directories.
+ * {@code mods/} directories.
  *
  * <p>ControlFlex provides the implementation; bridge mods simply call
  * {@link #install(String, String)} for each bundled asset.</p>

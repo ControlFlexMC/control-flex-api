@@ -19,7 +19,7 @@ public interface IControlFlexPlugin {
 
 ### onInstallCompatConfigs
 
-Called before `onControlFlexReady`. Use `ICompatAssetInstaller.install()` to export compat JSON files. Target: `config/controlflex/compat/cfx-mod/`. Priority: above `default/`, below `user/`. Same mod_id = override.
+Called before `onControlFlexReady`. Use `ICompatAssetInstaller.install()` to export compat JSON files. Target: `config/controlflex/compat/mods/`. Priority: above `default/`, below `user/`. Same mod_id = override.
 
 ```java
 @Override
@@ -32,7 +32,7 @@ public void onInstallCompatConfigs(ICompatAssetInstaller installer) {
 
 ### onInstallGuideAssets
 
-Same pattern for guide JSON. Target: `config/controlflex/guides/cfx-mod/`.
+Same pattern for guide JSON. Target: `config/controlflex/guides/mods/`.
 
 ### onControlFlexReady
 
@@ -80,11 +80,11 @@ com.example.mymod.MyPlugin
 ```
 config/controlflex/compat/          config/controlflex/guides/
 ├── default/    ← ControlFlex built-in   ├── default/
-├── cfx-mod/    ← Bridge mod installs     ├── cfx-mod/
+├── mods/    ← Bridge mod installs     ├── mods/
 └── user/       ← User customizations     └── user/
 ```
 
-Priority: `user > cfx-mod > default`
+Priority: `user > mods > default`
 
 ## Thread Safety
 

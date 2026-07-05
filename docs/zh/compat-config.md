@@ -6,11 +6,11 @@
 
 ```
 config/controlflex/compat/default/{modid}_keys.json   ← ControlFlex 内置
-config/controlflex/compat/cfx-mod/{modid}_keys.json    ← 桥接模组 (onInstallCompatConfigs)
+config/controlflex/compat/mods/{modid}_keys.json    ← 桥接模组 (onInstallCompatConfigs)
 config/controlflex/compat/user/{modid}_keys.json       ← 用户自定义
 ```
 
-优先级: `user > cfx-mod > default`，同 mod_id 完全覆盖。
+优先级: `user > mods > default`，同 mod_id 完全覆盖。
 
 ## JSON 格式
 
@@ -180,5 +180,5 @@ mode: `DEFAULT` / `RADIAL_CURSOR` / `VIRTUAL_MOUSE` / `DISABLED`
 
 ```
 [ModCompat] Loaded default/epicfight_keys.json for mod epicfight
-[ModCompat] cfx-mod/epicfight_keys.json overrides epicfight from lower layer
+[ModCompat] mods/epicfight_keys.json overrides epicfight from lower layer
 ```

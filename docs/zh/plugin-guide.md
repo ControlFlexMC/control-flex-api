@@ -8,10 +8,10 @@ public interface IControlFlexPlugin {
     /** 桥接模组的 Mod ID */
     String getModId();
 
-    /** 导出 compat JSON 到 cfx-mod/ */
+    /** 导出 compat JSON 到 mods/ */
     default void onInstallCompatConfigs(ICompatAssetInstaller installer) {}
 
-    /** 导出 guide JSON 到 cfx-mod/ */
+    /** 导出 guide JSON 到 mods/ */
     default void onInstallGuideAssets(ICompatAssetInstaller installer) {}
 
     /** ControlFlex 完全就绪 */
@@ -31,7 +31,7 @@ public interface IControlFlexPlugin {
 
 在 `onControlFlexReady` 之前调用。用 `ICompatAssetInstaller.install()` 安装 compat JSON。
 
-目标目录: `config/controlflex/compat/cfx-mod/`  
+目标目录: `config/controlflex/compat/mods/`  
 优先级: 高于 `default/`，低于 `user/`  
 覆盖规则: 同 mod_id 完全覆盖
 
@@ -47,7 +47,7 @@ public void onInstallCompatConfigs(ICompatAssetInstaller installer) {
 
 ### onInstallGuideAssets
 
-同上，但安装 guide JSON 到 `config/controlflex/guides/cfx-mod/`。
+同上，但安装 guide JSON 到 `config/controlflex/guides/mods/`。
 
 ```java
 @Override
@@ -113,13 +113,13 @@ ControlFlex 使用三层目录管理配置:
 ```
 config/controlflex/compat/          config/controlflex/guides/
 ├── default/    ← ControlFlex 内置    ├── default/
-├── cfx-mod/    ← 桥接模组安装         ├── cfx-mod/
+├── mods/    ← 桥接模组安装         ├── mods/
 └── user/       ← 用户自定义            └── user/
 ```
 
-优先级: `user > cfx-mod > default`
+优先级: `user > mods > default`
 
-桥接模组的 `onInstallCompatConfigs` / `onInstallGuideAssets` 写入 `cfx-mod/`。
+桥接模组的 `onInstallCompatConfigs` / `onInstallGuideAssets` 写入 `mods/`。
 
 ## 线程安全
 

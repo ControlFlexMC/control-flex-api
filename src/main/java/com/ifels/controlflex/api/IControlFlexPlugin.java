@@ -41,7 +41,7 @@ public interface IControlFlexPlugin {
 
     /**
      * Export compat configuration files from this bridge mod's JAR into the
-     * {@code cfx-mod/} directory. ControlFlex calls this before
+     * {@code mods/} directory. ControlFlex calls this before
      * {@link #onControlFlexReady()}.
      *
      * <p>Use the provided {@link ICompatAssetInstaller} to install bundled assets:</p>

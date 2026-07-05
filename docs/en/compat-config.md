@@ -6,11 +6,11 @@ Adapt third-party mod keys for controller support without writing Java code.
 
 ```
 config/controlflex/compat/default/{modid}_keys.json   ← ControlFlex built-in
-config/controlflex/compat/cfx-mod/{modid}_keys.json    ← Bridge mod (onInstallCompatConfigs)
+config/controlflex/compat/mods/{modid}_keys.json    ← Bridge mod (onInstallCompatConfigs)
 config/controlflex/compat/user/{modid}_keys.json       ← User customizations
 ```
 
-Priority: `user > cfx-mod > default`. Same mod_id = complete override.
+Priority: `user > mods > default`. Same mod_id = complete override.
 
 ## JSON Format
 
@@ -168,5 +168,5 @@ Check the logs after launch:
 
 ```
 [ModCompat] Loaded default/epicfight_keys.json for mod epicfight
-[ModCompat] cfx-mod/epicfight_keys.json overrides epicfight from lower layer
+[ModCompat] mods/epicfight_keys.json overrides epicfight from lower layer
 ```
