@@ -14,7 +14,7 @@ import java.util.Objects;
  * <p>Thread safety: all methods must be called from the client thread
  * (same thread as Minecraft's game loop), unless otherwise noted.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public final class ControlFlexApi {
 
@@ -62,7 +62,7 @@ public final class ControlFlexApi {
      * Get the player state registry for third-party mod states.
      *
      * @return registry instance, or null if ControlFlex is not available
-     * @since 1.0.0
+     * @since 0.8.5
      */
     public static IPlayerStateRegistry getPlayerStateRegistry() {
         return playerStateRegistry;

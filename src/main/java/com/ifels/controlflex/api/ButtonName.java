@@ -8,7 +8,7 @@ package com.ifels.controlflex.api;
  * <p>Use these constants instead of raw strings for compile-time safety
  * and IDE auto-completion.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public final class ButtonName {
 

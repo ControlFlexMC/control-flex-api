@@ -16,7 +16,7 @@ package com.ifels.controlflex.api;
  * guarantee across multiple fields — successive reads of different fields may
  * reflect different poll ticks.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IControllerState {
 

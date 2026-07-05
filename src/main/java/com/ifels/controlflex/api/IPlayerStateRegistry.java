@@ -9,7 +9,7 @@ package com.ifels.controlflex.api;
  * <p><b>Thread safety</b>: {@link #setState} may be called from any thread;
  * {@link #getState} should be read from the client thread for consistent results.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IPlayerStateRegistry {
 

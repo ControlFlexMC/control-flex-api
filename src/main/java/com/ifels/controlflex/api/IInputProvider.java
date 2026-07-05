@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Provides read-only access to the controller's hardware state.
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IInputProvider {
 

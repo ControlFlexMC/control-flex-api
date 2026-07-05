@@ -4,7 +4,7 @@ package com.ifels.controlflex.api;
  * Broad controller type classification.
  * Bridge mods can use this for platform-appropriate glyphs and layouts.
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public enum ControllerType {
     UNKNOWN,

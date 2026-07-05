@@ -7,7 +7,7 @@ package com.ifels.controlflex.api;
  *
  * <p>Obtain via {@link IInputProvider#getCapabilities()}.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IControllerCapabilities {
 

@@ -5,7 +5,7 @@ package com.ifels.controlflex.api;
  *
  * <p>Register via {@code META-INF/services/com.ifels.controlflex.api.IControlFlexPlugin}.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IControlFlexPlugin {
 

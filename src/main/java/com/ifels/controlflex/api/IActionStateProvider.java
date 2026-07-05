@@ -9,7 +9,7 @@ import java.util.Set;
  * {@code "epicfight:key.epicfight.attack"} for mod keys, or
  * {@code "key.jump"} / {@code "attack"} for vanilla and built-in actions.</p>
  *
- * @since 1.0.0
+ * @since 0.8.5
  */
 public interface IActionStateProvider {
 
