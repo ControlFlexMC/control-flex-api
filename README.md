@@ -2,7 +2,7 @@
 
 Public API for building ControlFlex bridge mods — read controller input, query action states, push mod states, and export compat configurations.
 
-[中文文档](README_CN.md)
+[中文文档](README_ZH.md)
 
 ## Documentation
 
