@@ -65,7 +65,7 @@ public interface IControlFlexPlugin {
      * Convenience method: check whether the ControlFlex API version meets
      * a minimum requirement. Logs a warning and returns false if not.
      *
-     * @param minVersion minimum required API version (e.g., "1.0.0")
+     * @param minVersion minimum required API version (e.g., "0.8.5")
      * @return true if the API is available and version is sufficient
      */
     default boolean requireApiVersion(String minVersion) {

@@ -69,7 +69,7 @@ public final class ControlFlexApi {
     }
 
     /**
-     * Get the API version string (e.g., "1.0.0").
+     * Get the API version string (e.g., "0.8.5").
      */
     public static String getApiVersion() {
         return apiVersion;
