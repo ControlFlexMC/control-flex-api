@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+    withSourcesJar()
+}
+
+base {
+    archivesName = 'controlflex-api'
+}
+
+version = api_version
+group = maven_group
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.jetbrains:annotations:24.0.1'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'controlflex-api'
+        }
+    }
+}
