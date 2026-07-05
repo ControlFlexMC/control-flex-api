@@ -20,8 +20,11 @@ Public API for building ControlFlex bridge mods — read controller input, query
 
 ```groovy
 // build.gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 dependencies {
-    compileOnly 'com.ifels.controlflex:controlflex-api:0.8.5'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.5'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -52,8 +55,11 @@ if (input.isConnected()) {
 
 ```groovy
 // build.gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 dependencies {
-    compileOnly 'com.ifels.controlflex:controlflex-api:0.8.5'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.5'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
