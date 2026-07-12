@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="controlflex_api"
-version="0.8.6"
+version="0.9.0"
 displayName="ControlFlex API"
 description="Public API for building ControlFlex bridge mods"
 logoFile="controlflex-api.png"
