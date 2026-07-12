@@ -1,15 +1,15 @@
-name: Build and Upload Release Asset
+name: Build and Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
 
     steps:
       - name: Checkout
@@ -24,10 +24,18 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
+      - name: Build and Test
         run: ./gradlew build
 
-      - name: Upload JAR to Release
+      - name: Generate SHA-256 checksums
+        run: |
+          cd build/libs
+          sha256sum controlflex-api-*.jar > checksums.sha256
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/libs/controlflex-api-*.jar
+          files: |
+            build/libs/controlflex-api-*.jar
+            build/libs/checksums.sha256
+          generate_release_notes: true

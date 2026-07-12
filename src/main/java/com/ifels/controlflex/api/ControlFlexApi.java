@@ -143,6 +143,22 @@ public final class ControlFlexApi {
         guideReloadCallback = callback;
     }
 
+    // ===== TESTING ONLY — DO NOT CALL FROM BRIDGE OR IMPLEMENTATION MODS =====
+
+    /**
+     * Reset all providers to null. For unit testing only.
+     * Calling this in production code will break the API for all consumers.
+     *
+     * @internal
+     */
+    static void resetForTesting() {
+        actionStateProvider = null;
+        inputProvider = null;
+        playerStateRegistry = null;
+        apiVersion = null;
+        guideReloadCallback = null;
+    }
+
     /** @internal Bridge for guide reload from plugins. */
     @FunctionalInterface
     public interface GuideReloadCallback {

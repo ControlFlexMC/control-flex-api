@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "controlflex_api",
+  "version": "0.8.6",
+  "name": "ControlFlex API",
+  "description": "Public API for building ControlFlex bridge mods",
+  "authors": ["ifels"],
+  "license": "MIT",
+  "icon": "controlflex-api.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.ifels.controlflex.api.ControlFlexApiMod"]
+  },
+  "depends": {
+    "minecraft": ">=1.20.1"
+  }
+}

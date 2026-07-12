@@ -1,0 +1,18 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+
+[[mods]]
+modId="controlflex_api"
+version="0.8.6"
+displayName="ControlFlex API"
+description="Public API for building ControlFlex bridge mods"
+logoFile="controlflex-api.png"
+side="BOTH"
+
+[[dependencies.controlflex_api]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,)"
+    ordering="NONE"
+    side="BOTH"

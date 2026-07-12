@@ -8,26 +8,126 @@ java {
     withSourcesJar()
 }
 
-base {
-    archivesName = 'controlflex-api'
-}
-
+base { archivesName = 'controlflex-api' }
 version = api_version
 group = maven_group
 
 repositories {
     mavenCentral()
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.minecraftforge.net/' }
+    maven { url 'https://maven.neoforged.net/releases' }
 }
 
 dependencies {
     compileOnly 'org.jetbrains:annotations:24.0.1'
+
+    // Three loader APIs — compileOnly for entrypoint compilation.
+    // Different package names → no conflicts at compile time or runtime.
+    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    compileOnly "net.minecraftforge:javafmllanguage:${minecraft_version}-${forge_version}"
+    compileOnly "net.neoforged.fancymodloader:language-java:${neoforge_fml_version}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 }
 
+test { useJUnitPlatform() }
+
+// ============================================================
+// Multi-loader JARs
+//
+// Mod metadata lives under src/main/resources/ but only ONE
+// loader's metadata file may be in a given JAR. A single JAR
+// containing both fabric.mod.json AND mods.toml confuses
+// launchers (XMCL, Prism) which scan metadata to classify mods.
+//
+// Approach: exclude ALL mod metadata from the default
+// processResources output, then each loader-specific Jar task
+// includes only its own metadata file.
+// ============================================================
+
+// Exclude loader metadata from the default resources processing.
+// They are added back by the loader-specific jar tasks below.
+processResources {
+    exclude 'fabric.mod.json'
+    exclude 'META-INF/mods.toml'
+}
+
+// Also exclude from the default jar (which uses processed resources)
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// --- Fabric JAR (only Fabric entrypoint + fabric.mod.json + icon) ---
+tasks.register('jarFabric', Jar) {
+    archiveClassifier = 'fabric'
+    from sourceSets.main.output
+    // Exclude Forge/NeoForge entrypoints — their referenced annotations
+    // (net.minecraftforge.fml.common.Mod, net.neoforged.fml.common.Mod)
+    // do not exist on the Fabric classpath and will cause validation errors.
+    exclude 'com/ifels/controlflex/api/ControlFlexApiForgeMod.class'
+    exclude 'com/ifels/controlflex/api/ControlFlexApiNeoMod.class'
+    exclude 'META-INF/**'
+    from('src/main/resources') {
+        include 'fabric.mod.json'
+        include '*.png'
+        include 'pack.mcmeta'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// --- Forge JAR (only Forge/Neo 1.20.1 entrypoint + mods.toml + icon) ---
+tasks.register('jarForge', Jar) {
+    archiveClassifier = 'forge'
+    from sourceSets.main.output
+    // Exclude Fabric entrypoint (references ModInitializer) and NeoForge
+    // 1.21+ entrypoint (references net.neoforged.fml.common.Mod which
+    // does not exist in Forge 1.20.1).
+    exclude 'com/ifels/controlflex/api/ControlFlexApiMod.class'
+    exclude 'com/ifels/controlflex/api/ControlFlexApiNeoMod.class'
+    exclude 'fabric.mod.json'
+    from('src/main/resources') {
+        include 'META-INF/mods.toml'
+        include '*.png'
+        include 'pack.mcmeta'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// --- NeoForge JAR (only NeoForge 1.21+ entrypoint + mods.toml + icon) ---
+tasks.register('jarNeoForge', Jar) {
+    archiveClassifier = 'neoforge'
+    from sourceSets.main.output
+    // Exclude Fabric entrypoint (references ModInitializer) and Forge
+    // 1.20.1 entrypoint (uses old @Mod package which NeoForge 1.21+
+    // does not scan).
+    exclude 'com/ifels/controlflex/api/ControlFlexApiMod.class'
+    exclude 'com/ifels/controlflex/api/ControlFlexApiForgeMod.class'
+    exclude 'fabric.mod.json'
+    from('src/main/resources') {
+        include 'META-INF/mods.toml'
+        include '*.png'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.named('build') {
+    dependsOn jarFabric, jarForge, jarNeoForge
+}
+
+// ============================================================
+// Publishing
+// ============================================================
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             artifactId = 'controlflex-api'
+
+            // Publish loader-specific jars as additional artifacts
+            artifact(jarFabric)
+            artifact(jarForge)
+            artifact(jarNeoForge)
         }
     }
 }
