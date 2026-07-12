@@ -22,7 +22,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.5'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.9.0'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
