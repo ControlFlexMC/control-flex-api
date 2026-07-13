@@ -122,6 +122,15 @@ class ControlFlexApiTest {
         assertDoesNotThrow(ControlFlexApi::reloadGuides);
     }
 
+    // ===== Package validation =====
+
+    @Test
+    void setActionStateProvider_shouldThrow_whenForeignImpl() {
+        com.example.ForeignActionStateProvider foreign = new com.example.ForeignActionStateProvider();
+        assertThrows(SecurityException.class, () ->
+            ControlFlexApi.setActionStateProvider(foreign));
+    }
+
     // ===== Stubs =====
 
     static class StubActionStateProvider implements IActionStateProvider {

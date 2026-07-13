@@ -91,11 +91,25 @@ public final class ControlFlexApi {
     // permanently unavailable. These are called exactly once by ControlFlex
     // during initialization.
 
+    /**
+     * Verify that a provider implementation comes from the ControlFlex package.
+     * Rejects implementations from other mods that might try to inject fake providers.
+     */
+    private static void verifyControlFlexImpl(Object provider, String name) {
+        String className = provider.getClass().getName();
+        if (!className.startsWith("com.ifels.controlflex.")) {
+            throw new SecurityException(
+                "[ControlFlexApi] Rejected " + name + " from unauthorized package: " +
+                className + ". Only ControlFlex implementations are accepted.");
+        }
+    }
+
     /** @internal */
     public static void setActionStateProvider(IActionStateProvider provider) {
         Objects.requireNonNull(provider,
             "[ControlFlexApi] ActionStateProvider must not be null. " +
             "This is an internal method — do not call from bridge mods.");
+        verifyControlFlexImpl(provider, "ActionStateProvider");
         if (actionStateProvider != null) {
             throw new IllegalStateException(
                 "[ControlFlexApi] ActionStateProvider already set. " +
@@ -110,6 +124,7 @@ public final class ControlFlexApi {
         Objects.requireNonNull(provider,
             "[ControlFlexApi] InputProvider must not be null. " +
             "This is an internal method — do not call from bridge mods.");
+        verifyControlFlexImpl(provider, "InputProvider");
         if (inputProvider != null) {
             throw new IllegalStateException(
                 "[ControlFlexApi] InputProvider already set. " +
@@ -124,6 +139,7 @@ public final class ControlFlexApi {
         Objects.requireNonNull(registry,
             "[ControlFlexApi] PlayerStateRegistry must not be null. " +
             "This is an internal method — do not call from bridge mods.");
+        verifyControlFlexImpl(registry, "PlayerStateRegistry");
         if (playerStateRegistry != null) {
             throw new IllegalStateException(
                 "[ControlFlexApi] PlayerStateRegistry already set. " +
