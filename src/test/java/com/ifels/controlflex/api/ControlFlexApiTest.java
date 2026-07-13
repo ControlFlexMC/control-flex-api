@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -131,6 +133,58 @@ class ControlFlexApiTest {
             ControlFlexApi.setActionStateProvider(foreign));
     }
 
+    // ===== Plugin registration =====
+
+    @Test
+    void registerPlugin_shouldAddToRegisteredList() {
+        StubPlugin plugin = new StubPlugin();
+        ControlFlexApi.registerPlugin(plugin);
+
+        assertTrue(ControlFlexApi.getRegisteredPlugins().contains(plugin));
+    }
+
+    @Test
+    void registerPlugin_shouldNotifyImmediately_whenApiAvailable() {
+        // Make API available first
+        ControlFlexApi.setActionStateProvider(new StubActionStateProvider());
+        ControlFlexApi.setInputProvider(new StubInputProvider());
+        ControlFlexApi.setPlayerStateRegistry(new StubPlayerStateRegistry());
+
+        StubPlugin plugin = new StubPlugin();
+        assertFalse(plugin.readyCalled);
+        ControlFlexApi.registerPlugin(plugin);
+        assertTrue(plugin.readyCalled);
+    }
+
+    @Test
+    void registerPlugin_shouldNotNotifyImmediately_whenApiNotAvailable() {
+        StubPlugin plugin = new StubPlugin();
+        ControlFlexApi.registerPlugin(plugin);
+        assertFalse(plugin.readyCalled);
+    }
+
+    @Test
+    void registerPlugin_shouldThrow_whenForeignPlugin() {
+        com.example.ForeignPlugin foreign = new com.example.ForeignPlugin();
+        assertThrows(SecurityException.class, () ->
+            ControlFlexApi.registerPlugin(foreign));
+    }
+
+    @Test
+    void registerPlugin_shouldThrow_whenNull() {
+        assertThrows(NullPointerException.class, () ->
+            ControlFlexApi.registerPlugin(null));
+    }
+
+    @Test
+    void getRegisteredPlugins_shouldReturnUnmodifiableSnapshot() {
+        ControlFlexApi.registerPlugin(new StubPlugin());
+        List<IControlFlexPlugin> snapshot = ControlFlexApi.getRegisteredPlugins();
+        assertEquals(1, snapshot.size());
+        // Returned list is unmodifiable — mutating it should throw
+        assertThrows(UnsupportedOperationException.class, snapshot::clear);
+    }
+
     // ===== Stubs =====
 
     static class StubActionStateProvider implements IActionStateProvider {
@@ -152,5 +206,15 @@ class ControlFlexApiTest {
         @Override public void setState(String stateKey, boolean active) {}
         @Override public boolean getState(String stateKey) { return false; }
         @Override public void clearState(String stateKey) {}
+    }
+
+    static class StubPlugin implements IControlFlexPlugin {
+        boolean readyCalled;
+
+        @Override
+        public String getModId() { return "test_mod"; }
+
+        @Override
+        public void onControlFlexReady() { readyCalled = true; }
     }
 }

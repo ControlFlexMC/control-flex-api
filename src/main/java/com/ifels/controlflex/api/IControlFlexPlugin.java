@@ -3,7 +3,8 @@ package com.ifels.controlflex.api;
 /**
  * SPI interface for bridge mods to integrate with ControlFlex.
  *
- * <p>Register via {@code META-INF/services/com.ifels.controlflex.api.IControlFlexPlugin}.</p>
+ * <p>Register via {@link ControlFlexApi#registerPlugin(IControlFlexPlugin)}
+ * during mod initialization. ControlFlex will process the plugin when ready.</p>
  *
  * @since 0.8.5
  */

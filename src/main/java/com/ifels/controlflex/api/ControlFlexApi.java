@@ -1,5 +1,8 @@
 package com.ifels.controlflex.api;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -23,6 +26,9 @@ public final class ControlFlexApi {
     private static volatile IPlayerStateRegistry playerStateRegistry;
     private static volatile GuideReloadCallback guideReloadCallback;
     private static volatile String apiVersion;
+
+    // Plugin registry — bridge mods register themselves instead of being discovered via ServiceLoader
+    private static final List<IControlFlexPlugin> registeredPlugins = new ArrayList<>();
 
     private ControlFlexApi() {}
 
@@ -83,6 +89,63 @@ public final class ControlFlexApi {
         GuideReloadCallback callback = guideReloadCallback;
         if (callback != null) {
             callback.reloadGuides();
+        }
+    }
+
+    // ===== PLUGIN REGISTRATION =====
+
+    /**
+     * Register a bridge mod plugin with ControlFlex.
+     *
+     * <p>Bridge mods should call this during their initialization (e.g., in
+     * {@code onInitialize} for Fabric or {@code FMLClientSetupEvent} for Forge).
+     * ControlFlex will export compat/guide assets and call
+     * {@link IControlFlexPlugin#onControlFlexReady()} when ready.</p>
+     *
+     * <p>Late registration is supported: if ControlFlex is already initialized
+     * when this is called, {@code onControlFlexReady()} is invoked immediately.</p>
+     *
+     * @param plugin the bridge mod plugin to register
+     * @throws SecurityException if the plugin is not from the ControlFlex package
+     * @since 0.9.0
+     */
+    public static void registerPlugin(IControlFlexPlugin plugin) {
+        Objects.requireNonNull(plugin,
+            "[ControlFlexApi] Plugin must not be null.");
+        String className = plugin.getClass().getName();
+        if (!className.startsWith("com.ifels.controlflex.") &&
+            !className.startsWith("com.ifels.cfx.")) {
+            throw new SecurityException(
+                "[ControlFlexApi] Rejected plugin from unauthorized package: " +
+                className + ". Bridge mods should use the com.ifels.cfx.* package.");
+        }
+        synchronized (registeredPlugins) {
+            registeredPlugins.add(plugin);
+        }
+        // If ControlFlex is already ready, notify immediately so late
+        // registrations don't miss the onControlFlexReady callback.
+        if (isAvailable()) {
+            try {
+                plugin.onControlFlexReady();
+            } catch (Exception e) {
+                // Swallow — bridge mod's problem, don't break the caller
+            }
+        }
+    }
+
+    /**
+     * Get all registered bridge mod plugins.
+     *
+     * <p>Called by the ControlFlex implementation during plugin processing.
+     * Returns a snapshot copy; modifications to the returned list do not
+     * affect the internal registry.</p>
+     *
+     * @return unmodifiable list of registered plugins
+     * @since 0.9.0
+     */
+    public static List<IControlFlexPlugin> getRegisteredPlugins() {
+        synchronized (registeredPlugins) {
+            return Collections.unmodifiableList(new ArrayList<>(registeredPlugins));
         }
     }
 
@@ -173,6 +236,9 @@ public final class ControlFlexApi {
         playerStateRegistry = null;
         apiVersion = null;
         guideReloadCallback = null;
+        synchronized (registeredPlugins) {
+            registeredPlugins.clear();
+        }
     }
 
     /** @internal Bridge for guide reload from plugins. */
