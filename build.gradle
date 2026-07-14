@@ -121,8 +121,9 @@ tasks.named('build') {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            groupId = 'com.github.ControlFlexMC'
+            artifactId = 'control-flex-api'
             from components.java
-            artifactId = 'controlflex-api'
 
             // Publish loader-specific jars as additional artifacts
             artifact(jarFabric)
