@@ -1,7 +1,7 @@
 # API 参考
 
 > 包路径: `com.ifels.controlflex.api`  
-> 版本: 0.8.5  
+> 版本: 0.8.6  
 > 线程模型: 所有方法必须在客户端主线程调用（除非特别标注）
 
 ## 类型清单
@@ -17,6 +17,10 @@
 | `IControllerState` | 控制器硬件状态（实时视图） |
 | `IControllerCapabilities` | 控制器硬件能力 |
 | `IPlayerStateRegistry` | 第三方模组状态推送 |
+| `IInputInjector` | 虚拟手柄输入注入（测试工具） |
+| `IInteractiveContextRegistrar` | 交互式界面/场景上下文声明 |
+| `InteractiveContextHint` | 上下文声明记录（className + 摇杆行为） |
+| `StickBehavior` | 交互上下文的摇杆行为模式 |
 | `InputMode` | 输入模式（KEYBOARD_MOUSE / MIXED） |
 | `ControllerType` | 控制器类型枚举 |
 
@@ -43,12 +47,14 @@ boolean isControllerConnected()     // 有控制器连接
 IActionStateProvider getActionStateProvider()    // null = 不可用
 IInputProvider getInputProvider()                // null = 不可用
 IPlayerStateRegistry getPlayerStateRegistry()    // null = 不可用
+IInputInjector getInputInjector()                // null = 不可用（测试工具）
+IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null = 不可用
 ```
 
 ### 工具
 
 ```java
-String getApiVersion()    // e.g. "0.8.5"
+String getApiVersion()    // e.g. "0.8.6"
 void reloadGuides()       // 重新加载 guide 配置
 ```
 
@@ -236,6 +242,52 @@ void clearState(String stateKey)                // 删除注册
 
 ---
 
+## IInputInjector
+
+虚拟手柄输入注入，供测试工具 / 桥接模组使用。注入状态是**粘性的**（按钮按下后保持，直到释放或清除），并与真实手柄输入一样走正常的按键绑定流水线。
+
+```java
+void pressButton(String buttonName, boolean pressed)  // ButtonName 常量，如 "buttonA"、"dpadUp"
+void setAxis(String axisName, float value)            // -1.0..1.0；"leftStickX"、"rightTrigger"… 0 表示清除覆盖
+void clearAll()                                       // 释放所有按钮、清零所有轴
+```
+
+**线程安全**: 实现必须可跨线程调用；状态在客户端 tick 上原子应用。
+
+---
+
+## IInteractiveContextRegistrar
+
+声明交互式界面/场景。ControlFlex 据此在交互 UI 打开时切换摇杆行为（例如禁用鼠标光标控制）；场景退出时也会自动清除作为兜底。
+
+```java
+void notifyOpen(InteractiveContextHint hint)   // 进入交互式界面/场景
+void notifyClose(String className)             // 离开（与 notifyOpen 配对）
+void clearAll()                                // 模组卸载 / 退出世界时的兜底
+```
+
+**仅限客户端线程**；`ControlFlexApi.getInteractiveContextRegistrar()` 可能为 null，调用前需判空。
+
+---
+
+## InteractiveContextHint / StickBehavior
+
+`InteractiveContextHint` 是传给 `notifyOpen(...)` 的声明记录；某一侧为 null 表示"不覆盖该侧"。
+
+```java
+record InteractiveContextHint(String className, StickBehavior leftStick, StickBehavior rightStick)
+
+StickBehavior.DEFAULT        // 不覆盖
+StickBehavior.RADIAL_PATH    // 摇杆以径向方式定位光标（环形选择）
+StickBehavior.VIRTUAL_MOUSE  // 摇杆直接驱动虚拟鼠标光标
+StickBehavior.DISABLED       // 摇杆不驱动光标
+
+// 通过静态工厂构造:
+InteractiveContextHint.of("com.example.MyScreen", StickBehavior.DISABLED, null)
+```
+
+---
+
 ## 线程模型
 
 | 接口 | 约束 |
@@ -246,3 +298,5 @@ void clearState(String stateKey)                // 删除注册
 | `IControllerCapabilities` | 客户端主线程 |
 | `IPlayerStateRegistry.setState()` | **任意线程** |
 | `IPlayerStateRegistry.getState()` | 客户端主线程 |
+| `IInputInjector` | **任意线程**（在客户端 tick 上原子应用） |
+| `IInteractiveContextRegistrar` | 客户端主线程 |

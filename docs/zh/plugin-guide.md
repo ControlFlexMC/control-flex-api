@@ -67,7 +67,7 @@ public void onInstallGuideAssets(ICompatAssetInstaller installer) {
 @Override
 public void onControlFlexReady() {
     // 1. 版本检查
-    if (!requireApiVersion("0.8.5")) return;
+    if (!requireApiVersion("0.8.6")) return;
 
     // 2. API 可用性
     if (!ControlFlexApi.isAvailable()) return;
@@ -169,7 +169,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.5")) return;
+        if (!requireApiVersion("0.8.6")) return;
         if (!ControlFlexApi.isAvailable()) return;
 
         IPlayerStateRegistry states = ControlFlexApi.getPlayerStateRegistry();

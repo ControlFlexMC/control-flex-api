@@ -1,7 +1,7 @@
 # API Reference
 
 > Package: `com.ifels.controlflex.api`  
-> Version: 0.8.5  
+> Version: 0.8.6  
 > Thread model: All methods must be called from the client thread unless noted otherwise
 
 ## Type List
@@ -17,6 +17,10 @@
 | `IControllerState` | Controller hardware state (live view) |
 | `IControllerCapabilities` | Controller hardware capabilities |
 | `IPlayerStateRegistry` | Third-party mod state push |
+| `IInputInjector` | Virtual gamepad input injection (test harnesses) |
+| `IInteractiveContextRegistrar` | Interactive overlay/screen context declaration |
+| `InteractiveContextHint` | Context declaration record (className + stick behaviors) |
+| `StickBehavior` | Stick behavior modes for interactive contexts |
 | `InputMode` | Input mode (KEYBOARD_MOUSE / MIXED) |
 | `ControllerType` | Controller type enum |
 
@@ -43,12 +47,14 @@ boolean isControllerConnected()     // A controller is connected
 IActionStateProvider getActionStateProvider()    // null if unavailable
 IInputProvider getInputProvider()                // null if unavailable
 IPlayerStateRegistry getPlayerStateRegistry()    // null if unavailable
+IInputInjector getInputInjector()                // null if unavailable (test harnesses)
+IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null if unavailable
 ```
 
 ### Utilities
 
 ```java
-String getApiVersion()    // e.g. "0.8.5"
+String getApiVersion()    // e.g. "0.8.6"
 void reloadGuides()       // Reload guide definitions
 ```
 
@@ -217,6 +223,52 @@ void clearState(String stateKey)                // remove registration
 
 ---
 
+## IInputInjector
+
+Virtual gamepad input injection for test harnesses / bridge mods. Injected state is **sticky** (a button stays pressed until released or cleared) and flows through the normal binding pipeline like real controller input.
+
+```java
+void pressButton(String buttonName, boolean pressed)  // ButtonName constants, e.g. "buttonA", "dpadUp"
+void setAxis(String axisName, float value)            // -1.0..1.0; "leftStickX", "rightTrigger", ... 0 removes override
+void clearAll()                                       // release all buttons, zero all axes
+```
+
+**Thread safety**: implementations must be safe to call from any thread; state is applied atomically on the client tick.
+
+---
+
+## IInteractiveContextRegistrar
+
+Declare interactive overlays/screens. ControlFlex uses this to switch stick behavior (e.g. disable cursor control) while an interactive UI is open; it also auto-clears on phase exit as a fallback.
+
+```java
+void notifyOpen(InteractiveContextHint hint)   // entering an interactive overlay/screen
+void notifyClose(String className)             // leaving it (paired with notifyOpen)
+void clearAll()                                // fallback for mod unload / world exit
+```
+
+**Client thread only**; null-check `ControlFlexApi.getInteractiveContextRegistrar()` when ControlFlex may be absent.
+
+---
+
+## InteractiveContextHint / StickBehavior
+
+`InteractiveContextHint` is the declaration record passed to `notifyOpen(...)`; a `null` side means "do not override that side".
+
+```java
+record InteractiveContextHint(String className, StickBehavior leftStick, StickBehavior rightStick)
+
+StickBehavior.DEFAULT        // no override
+StickBehavior.RADIAL_PATH    // stick positions cursor radially (ring selection)
+StickBehavior.VIRTUAL_MOUSE  // stick drives the virtual mouse cursor
+StickBehavior.DISABLED       // stick does not drive the cursor
+
+// Construct via the static factory:
+InteractiveContextHint.of("com.example.MyScreen", StickBehavior.DISABLED, null)
+```
+
+---
+
 ## Thread Model
 
 | Interface | Constraint |
@@ -227,3 +279,5 @@ void clearState(String stateKey)                // remove registration
 | `IControllerCapabilities` | Client main thread |
 | `IPlayerStateRegistry.setState()` | **Any thread** |
 | `IPlayerStateRegistry.getState()` | Client main thread |
+| `IInputInjector` | **Any thread** (applied atomically on client tick) |
+| `IInteractiveContextRegistrar` | Client main thread |

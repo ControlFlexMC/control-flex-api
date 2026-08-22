@@ -121,7 +121,7 @@ public class CfxEpicFightPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.5")) return;
+        if (!requireApiVersion("0.8.6")) return;
         if (!ControlFlexApi.isAvailable()) return;
         stateBridge.initialize();
     }
@@ -139,12 +139,12 @@ def modArtifactVersion = build_id ? "${mod_version}.${build_id}" : mod_version
 version = "${modArtifactVersion}-mc${minecraft_version}-forge"
 
 repositories {
-    mavenLocal()
+    maven { url 'https://jitpack.io' }
     maven { url 'https://cursemaven.com' }
 }
 
 dependencies {
-    compileOnly 'com.ifels.controlflex:controlflex-api:0.8.5'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
     compileOnly 'curse.maven:epicfight-405076:7789099'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }

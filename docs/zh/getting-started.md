@@ -11,13 +11,12 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
-    // 后续可通过 CurseMaven / Modrinth Maven 获取
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     // ControlFlex API — compileOnly，运行时由 ControlFlex 主模组提供
-    compileOnly 'com.ifels.controlflex:controlflex-api:0.8.5'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -28,7 +27,7 @@ dependencies {
 [[dependencies.your_mod_id]]
     modId = "controlflex"
     mandatory = true
-    versionRange = "[0.8.5,)"
+    versionRange = "[0.8.6,)"
     ordering = "AFTER"
     side = "CLIENT"
 ```
@@ -38,7 +37,7 @@ dependencies {
 ```json
 {
   "depends": {
-    "controlflex": ">=0.8.5"
+    "controlflex": ">=0.8.6"
   }
 }
 ```
@@ -93,7 +92,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.5")) return;
+        if (!requireApiVersion("0.8.6")) return;
         if (!ControlFlexApi.isAvailable()) return;
 
         // 初始化你的桥接逻辑

@@ -41,7 +41,7 @@ The single initialization callback. All API providers are ready.
 ```java
 @Override
 public void onControlFlexReady() {
-    if (!requireApiVersion("0.8.5")) return;
+    if (!requireApiVersion("0.8.6")) return;
     if (!ControlFlexApi.isAvailable()) return;
 
     // Register event listeners
@@ -124,7 +124,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.5")) return;
+        if (!requireApiVersion("0.8.6")) return;
         if (!ControlFlexApi.isAvailable()) return;
         LOGGER.info("Bridge mod ready. API: {}", ControlFlexApi.getApiVersion());
     }

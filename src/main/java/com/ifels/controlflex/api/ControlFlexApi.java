@@ -20,8 +20,10 @@ public final class ControlFlexApi {
 
     private static volatile IActionStateProvider actionStateProvider;
     private static volatile IInputProvider inputProvider;
+    private static volatile IInputInjector inputInjector;
     private static volatile IPlayerStateRegistry playerStateRegistry;
     private static volatile GuideReloadCallback guideReloadCallback;
+    private static volatile IInteractiveContextRegistrar interactiveContextRegistrar;
     private static volatile String apiVersion;
 
     private ControlFlexApi() {}
@@ -59,6 +61,19 @@ public final class ControlFlexApi {
     }
 
     /**
+     * Get the virtual gamepad input injector for synthesizing controller input.
+     *
+     * <p>Returns null when ControlFlex is not available. Injectors are
+     * intended for test harnesses / bridge mods; see {@link IInputInjector}.</p>
+     *
+     * @return injector instance, or null if ControlFlex is not available
+     * @since 0.8.6
+     */
+    public static IInputInjector getInputInjector() {
+        return inputInjector;
+    }
+
+    /**
      * Get the player state registry for third-party mod states.
      *
      * @return registry instance, or null if ControlFlex is not available
@@ -66,6 +81,15 @@ public final class ControlFlexApi {
      */
     public static IPlayerStateRegistry getPlayerStateRegistry() {
         return playerStateRegistry;
+    }
+
+    /**
+     * Get the interactive-context registrar for declaring interactive overlays/screens.
+     * @return registrar, or null when ControlFlex is not available
+     * @since 0.8.6
+     */
+    public static IInteractiveContextRegistrar getInteractiveContextRegistrar() {
+        return interactiveContextRegistrar;
     }
 
     /**
@@ -120,6 +144,20 @@ public final class ControlFlexApi {
     }
 
     /** @internal */
+    public static void setInputInjector(IInputInjector injector) {
+        Objects.requireNonNull(injector,
+            "[ControlFlexApi] InputInjector must not be null. " +
+            "This is an internal method — do not call from bridge mods.");
+        if (inputInjector != null) {
+            throw new IllegalStateException(
+                "[ControlFlexApi] InputInjector already set. " +
+                "ControlFlexApi.setXxx methods are internal. " +
+                "Use ControlFlexApi.getXxx() for public API access.");
+        }
+        inputInjector = injector;
+    }
+
+    /** @internal */
     public static void setPlayerStateRegistry(IPlayerStateRegistry registry) {
         Objects.requireNonNull(registry,
             "[ControlFlexApi] PlayerStateRegistry must not be null. " +
@@ -131,6 +169,20 @@ public final class ControlFlexApi {
                 "Use ControlFlexApi.getXxx() for public API access.");
         }
         playerStateRegistry = registry;
+    }
+
+    /** @internal */
+    public static void setInteractiveContextRegistrar(IInteractiveContextRegistrar registrar) {
+        Objects.requireNonNull(registrar,
+            "[ControlFlexApi] InteractiveContextRegistrar must not be null. " +
+            "This is an internal method — do not call from bridge mods.");
+        if (interactiveContextRegistrar != null) {
+            throw new IllegalStateException(
+                "[ControlFlexApi] InteractiveContextRegistrar already set. " +
+                "ControlFlexApi.setXxx methods are internal. " +
+                "Use ControlFlexApi.getXxx() for public API access.");
+        }
+        interactiveContextRegistrar = registrar;
     }
 
     /** @internal */
