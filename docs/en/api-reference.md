@@ -18,9 +18,7 @@
 | `IControllerCapabilities` | Controller hardware capabilities |
 | `IPlayerStateRegistry` | Third-party mod state push |
 | `IInputInjector` | Virtual gamepad input injection (test harnesses) |
-| `IInteractiveContextRegistrar` | Interactive overlay/screen context declaration |
-| `InteractiveContextHint` | Context declaration record (className + stick behaviors) |
-| `StickBehavior` | Stick behavior modes for interactive contexts |
+| `IInteractiveContextRegistrar` | Interactive overlay/screen foreground/background declaration |
 | `InputMode` | Input mode (KEYBOARD_MOUSE / MIXED) |
 | `ControllerType` | Controller type enum |
 
@@ -239,33 +237,17 @@ void clearAll()                                       // release all buttons, ze
 
 ## IInteractiveContextRegistrar
 
-Declare interactive overlays/screens. ControlFlex uses this to switch stick behavior (e.g. disable cursor control) while an interactive UI is open; it also auto-clears on phase exit as a fallback.
+Declare interactive overlays/screens: **foreground** when an interactive UI opens, **background** when it closes. ControlFlex uses this to switch stick behavior while the context is active, and auto-clears on phase exit as a fallback.
 
 ```java
-void notifyOpen(InteractiveContextHint hint)   // entering an interactive overlay/screen
-void notifyClose(String className)             // leaving it (paired with notifyOpen)
-void clearAll()                                // fallback for mod unload / world exit
+void notifyForeground(String className)   // interactive overlay/screen came to the foreground
+void notifyBackground(String className)   // it returned to the background (paired)
+void clearAll()                            // fallback for mod unload / world exit
 ```
+
+**className** is the fully-qualified name of the interactive screen/overlay — stick behavior for the class is resolved from ControlFlex compat configuration.
 
 **Client thread only**; null-check `ControlFlexApi.getInteractiveContextRegistrar()` when ControlFlex may be absent.
-
----
-
-## InteractiveContextHint / StickBehavior
-
-`InteractiveContextHint` is the declaration record passed to `notifyOpen(...)`; a `null` side means "do not override that side".
-
-```java
-record InteractiveContextHint(String className, StickBehavior leftStick, StickBehavior rightStick)
-
-StickBehavior.DEFAULT        // no override
-StickBehavior.RADIAL_PATH    // stick positions cursor radially (ring selection)
-StickBehavior.VIRTUAL_MOUSE  // stick drives the virtual mouse cursor
-StickBehavior.DISABLED       // stick does not drive the cursor
-
-// Construct via the static factory:
-InteractiveContextHint.of("com.example.MyScreen", StickBehavior.DISABLED, null)
-```
 
 ---
 

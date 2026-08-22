@@ -115,6 +115,19 @@ public final class ControlFlexApi {
     // permanently unavailable. These are called exactly once by ControlFlex
     // during initialization.
 
+    /**
+     * Verify that a provider implementation comes from a {@code com.ifels.} package.
+     * Rejects implementations from other mods that might try to inject fake providers.
+     */
+    private static void verifyControlFlexImpl(Object impl, String name) {
+        String className = impl.getClass().getName();
+        if (!className.startsWith("com.ifels.")) {
+            throw new SecurityException(
+                "[ControlFlexApi] Rejected " + name + " from unauthorized package: " +
+                className + ". Only com.ifels. implementations are accepted.");
+        }
+    }
+
     /** @internal */
     public static void setActionStateProvider(IActionStateProvider provider) {
         Objects.requireNonNull(provider,
@@ -154,6 +167,7 @@ public final class ControlFlexApi {
                 "ControlFlexApi.setXxx methods are internal. " +
                 "Use ControlFlexApi.getXxx() for public API access.");
         }
+        verifyControlFlexImpl(injector, "InputInjector");
         inputInjector = injector;
     }
 
@@ -182,6 +196,7 @@ public final class ControlFlexApi {
                 "ControlFlexApi.setXxx methods are internal. " +
                 "Use ControlFlexApi.getXxx() for public API access.");
         }
+        verifyControlFlexImpl(registrar, "InteractiveContextRegistrar");
         interactiveContextRegistrar = registrar;
     }
 

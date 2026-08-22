@@ -18,9 +18,7 @@
 | `IControllerCapabilities` | 控制器硬件能力 |
 | `IPlayerStateRegistry` | 第三方模组状态推送 |
 | `IInputInjector` | 虚拟手柄输入注入（测试工具） |
-| `IInteractiveContextRegistrar` | 交互式界面/场景上下文声明 |
-| `InteractiveContextHint` | 上下文声明记录（className + 摇杆行为） |
-| `StickBehavior` | 交互上下文的摇杆行为模式 |
+| `IInteractiveContextRegistrar` | 交互式界面/场景前后台声明 |
 | `InputMode` | 输入模式（KEYBOARD_MOUSE / MIXED） |
 | `ControllerType` | 控制器类型枚举 |
 
@@ -258,33 +256,17 @@ void clearAll()                                       // 释放所有按钮、�
 
 ## IInteractiveContextRegistrar
 
-声明交互式界面/场景。ControlFlex 据此在交互 UI 打开时切换摇杆行为（例如禁用鼠标光标控制）；场景退出时也会自动清除作为兜底。
+声明交互式界面/场景:**前台**表示交互 UI 打开,**后台**表示其关闭。ControlFlex 据此在该上下文激活期间切换摇杆行为;场景退出时也会自动清除作为兜底。
 
 ```java
-void notifyOpen(InteractiveContextHint hint)   // 进入交互式界面/场景
-void notifyClose(String className)             // 离开（与 notifyOpen 配对）
-void clearAll()                                // 模组卸载 / 退出世界时的兜底
+void notifyForeground(String className)   // 交互式界面/场景进入前台
+void notifyBackground(String className)   // 返回后台（与 notifyForeground 配对）
+void clearAll()                            // 模组卸载 / 退出世界时的兜底
 ```
+
+**className** 为交互式界面/场景的全限定类名——该类名的摇杆行为由 ControlFlex 的 compat 配置解析。
 
 **仅限客户端线程**；`ControlFlexApi.getInteractiveContextRegistrar()` 可能为 null，调用前需判空。
-
----
-
-## InteractiveContextHint / StickBehavior
-
-`InteractiveContextHint` 是传给 `notifyOpen(...)` 的声明记录；某一侧为 null 表示"不覆盖该侧"。
-
-```java
-record InteractiveContextHint(String className, StickBehavior leftStick, StickBehavior rightStick)
-
-StickBehavior.DEFAULT        // 不覆盖
-StickBehavior.RADIAL_PATH    // 摇杆以径向方式定位光标（环形选择）
-StickBehavior.VIRTUAL_MOUSE  // 摇杆直接驱动虚拟鼠标光标
-StickBehavior.DISABLED       // 摇杆不驱动光标
-
-// 通过静态工厂构造:
-InteractiveContextHint.of("com.example.MyScreen", StickBehavior.DISABLED, null)
-```
 
 ---
 
