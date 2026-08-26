@@ -2,42 +2,43 @@ package com.ifels.controlflex.api;
 
 /**
  * Interactive-context registrar (spec 主 §10): mods actively notify ControlFlex
- * when they bring an interactive overlay/screen to the <b>foreground</b> (declared
- * by its class name) and when they return to the <b>background</b>. ControlFlex
- * uses this to switch stick behavior while such a context is active; it also
- * auto-clears on phase exit as a fallback.
+ * when they bring an interactive <b>overlay</b> to the <b>foreground</b> (declared
+ * by its class name) and when it returns to the <b>background</b>. ControlFlex
+ * records the class as an active overlay and switches stick behavior during the
+ * OVERLAY phase while it is active; it also auto-clears on phase exit as a
+ * fallback.
  *
  * <p><b>Foreground/background pairing</b>: call
- * {@link #notifyForeground(String)} when the interactive context opens, and the
- * paired {@link #notifyBackground(String)} with the same class name when it
- * closes. Both take the fully-qualified class name of the interactive
- * screen/overlay — that is all ControlFlex needs to identify the context;</p>
- * stick behavior for the class is resolved from ControlFlex compat
- * configuration.</p>
+ * {@link #notifyOverlayForeground(String)} when the overlay opens, and the
+ * paired {@link #notifyOverlayBackground(String)} with the same class name when
+ * it closes. Both take the fully-qualified class name of the overlay — that is
+ * all ControlFlex needs to identify the context; stick behavior for the class is
+ * resolved from ControlFlex compat configuration.
  *
  * <p>Thread safety: call from the client (main) thread only. When ControlFlex is
  * not installed, {@code ControlFlexApi.getInteractiveContextRegistrar()} returns
- * null — callers must null-check.</p>
+ * null — callers must null-check.
  *
  * @since 0.8.6
  */
 public interface IInteractiveContextRegistrar {
 
     /**
-     * Notifies that an interactive overlay/screen (className) came to the foreground.
-     * Pair with {@link #notifyBackground(String)}; ControlFlex also auto-clears on
-     * phase exit as a fallback.
+     * Notifies that an interactive overlay (className) came to the foreground,
+     * becoming the active overlay for the OVERLAY phase.
+     * Pair with {@link #notifyOverlayBackground(String)}; ControlFlex also
+     * auto-clears on phase exit as a fallback.
      *
-     * @param className fully-qualified class name of the interactive context
+     * @param className fully-qualified class name of the interactive overlay
      */
-    void notifyForeground(String className);
+    void notifyOverlayForeground(String className);
 
     /**
-     * Paired exit API: notifies that the context (className) returned to the background.
+     * Paired exit API: notifies that the overlay (className) returned to the background.
      *
-     * @param className same class name passed to {@link #notifyForeground(String)}
+     * @param className same class name passed to {@link #notifyOverlayForeground(String)}
      */
-    void notifyBackground(String className);
+    void notifyOverlayBackground(String className);
 
     /** Clears everything (fallback for mod unload / world exit scenarios). */
     void clearAll();

@@ -1,7 +1,7 @@
 # API 参考
 
 > 包路径: `com.ifels.controlflex.api`  
-> 版本: 0.8.6  
+> 版本: 0.8.6.3  
 > 线程模型: 所有方法必须在客户端主线程调用（除非特别标注）
 
 ## 类型清单
@@ -18,7 +18,7 @@
 | `IControllerCapabilities` | 控制器硬件能力 |
 | `IPlayerStateRegistry` | 第三方模组状态推送 |
 | `IInputInjector` | 虚拟手柄输入注入（测试工具） |
-| `IInteractiveContextRegistrar` | 交互式界面/场景前后台声明 |
+| `IInteractiveContextRegistrar` | 交互式 Overlay 前后台声明 |
 | `InputMode` | 输入模式（KEYBOARD_MOUSE / MIXED） |
 | `ControllerType` | 控制器类型枚举 |
 
@@ -256,15 +256,17 @@ void clearAll()                                       // 释放所有按钮、�
 
 ## IInteractiveContextRegistrar
 
-声明交互式界面/场景:**前台**表示交互 UI 打开,**后台**表示其关闭。ControlFlex 据此在该上下文激活期间切换摇杆行为;场景退出时也会自动清除作为兜底。
+声明交互式 Overlay：**前台**表示交互式 Overlay 打开，**后台**表示其关闭。ControlFlex 据此将该类名记为当前活跃 Overlay，并在 OVERLAY 相位期间切换摇杆行为；场景退出时也会自动清除作为兜底。
 
 ```java
-void notifyForeground(String className)   // 交互式界面/场景进入前台
-void notifyBackground(String className)   // 返回后台（与 notifyForeground 配对）
-void clearAll()                            // 模组卸载 / 退出世界时的兜底
+void notifyOverlayForeground(String className)   // 交互式 Overlay 进入前台
+void notifyOverlayBackground(String className)   // 返回后台（与 notifyOverlayForeground 配对）
+void clearAll()                                   // 模组卸载 / 退出世界时的兜底
 ```
 
-**className** 为交互式界面/场景的全限定类名——该类名的摇杆行为由 ControlFlex 的 compat 配置解析。
+**className** 为交互式 Overlay 的全限定类名——该类名的摇杆行为由 ControlFlex 的 compat 配置解析。
+
+> **0.8.6.3 破坏性变更**: 由 0.8.6 的 `notifyForeground`/`notifyBackground` 改名而来；按 0.8.6 名称编译的模组需针对本版本重新编译。
 
 **仅限客户端线程**；`ControlFlexApi.getInteractiveContextRegistrar()` 可能为 null，调用前需判空。
 

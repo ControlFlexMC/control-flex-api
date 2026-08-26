@@ -1,7 +1,7 @@
 # API Reference
 
 > Package: `com.ifels.controlflex.api`  
-> Version: 0.8.6  
+> Version: 0.8.6.3  
 > Thread model: All methods must be called from the client thread unless noted otherwise
 
 ## Type List
@@ -18,7 +18,7 @@
 | `IControllerCapabilities` | Controller hardware capabilities |
 | `IPlayerStateRegistry` | Third-party mod state push |
 | `IInputInjector` | Virtual gamepad input injection (test harnesses) |
-| `IInteractiveContextRegistrar` | Interactive overlay/screen foreground/background declaration |
+| `IInteractiveContextRegistrar` | Interactive overlay foreground/background declaration |
 | `InputMode` | Input mode (KEYBOARD_MOUSE / MIXED) |
 | `ControllerType` | Controller type enum |
 
@@ -237,15 +237,17 @@ void clearAll()                                       // release all buttons, ze
 
 ## IInteractiveContextRegistrar
 
-Declare interactive overlays/screens: **foreground** when an interactive UI opens, **background** when it closes. ControlFlex uses this to switch stick behavior while the context is active, and auto-clears on phase exit as a fallback.
+Declare interactive overlays: **foreground** when an interactive overlay opens, **background** when it closes. ControlFlex records the class as the active overlay and switches stick behavior for the OVERLAY phase while it is active, and auto-clears on phase exit as a fallback.
 
 ```java
-void notifyForeground(String className)   // interactive overlay/screen came to the foreground
-void notifyBackground(String className)   // it returned to the background (paired)
-void clearAll()                            // fallback for mod unload / world exit
+void notifyOverlayForeground(String className)   // interactive overlay came to the foreground
+void notifyOverlayBackground(String className)   // it returned to the background (paired)
+void clearAll()                                   // fallback for mod unload / world exit
 ```
 
-**className** is the fully-qualified name of the interactive screen/overlay — stick behavior for the class is resolved from ControlFlex compat configuration.
+**className** is the fully-qualified name of the interactive overlay — stick behavior for the class is resolved from ControlFlex compat configuration.
+
+> **0.8.6.3 breaking change**: renamed from `notifyForeground`/`notifyBackground` (0.8.6). Mods compiled against the 0.8.6 names must be recompiled against this version.
 
 **Client thread only**; null-check `ControlFlexApi.getInteractiveContextRegistrar()` when ControlFlex may be absent.
 
