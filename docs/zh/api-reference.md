@@ -1,7 +1,7 @@
 # API 参考
 
 > 包路径: `com.ifels.controlflex.api`  
-> 版本: 0.8.6.3  
+> 版本: 0.8.7  
 > 线程模型: 所有方法必须在客户端主线程调用（除非特别标注）
 
 ## 类型清单
@@ -266,7 +266,7 @@ void clearAll()                                   // 模组卸载 / 退出世界
 
 **className** 为交互式 Overlay 的全限定类名——该类名的摇杆行为由 ControlFlex 的 compat 配置解析。
 
-> **0.8.6.3 破坏性变更**: 由 0.8.6 的 `notifyForeground`/`notifyBackground` 改名而来；按 0.8.6 名称编译的模组需针对本版本重新编译。
+> **0.8.7 破坏性变更**: 由 0.8.6 的 `notifyForeground`/`notifyBackground` 改名而来；按 0.8.6 名称编译的模组需针对本版本重新编译。
 
 **仅限客户端线程**；`ControlFlexApi.getInteractiveContextRegistrar()` 可能为 null，调用前需判空。
 

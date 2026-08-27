@@ -1,7 +1,7 @@
 # API Reference
 
 > Package: `com.ifels.controlflex.api`  
-> Version: 0.8.6.3  
+> Version: 0.8.7  
 > Thread model: All methods must be called from the client thread unless noted otherwise
 
 ## Type List
@@ -247,7 +247,7 @@ void clearAll()                                   // fallback for mod unload / w
 
 **className** is the fully-qualified name of the interactive overlay — stick behavior for the class is resolved from ControlFlex compat configuration.
 
-> **0.8.6.3 breaking change**: renamed from `notifyForeground`/`notifyBackground` (0.8.6). Mods compiled against the 0.8.6 names must be recompiled against this version.
+> **0.8.7 breaking change**: renamed from `notifyForeground`/`notifyBackground` (0.8.6). Mods compiled against the 0.8.6 names must be recompiled against this version.
 
 **Client thread only**; null-check `ControlFlexApi.getInteractiveContextRegistrar()` when ControlFlex may be absent.
 
