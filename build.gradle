@@ -25,13 +25,10 @@ dependencies {
 
 publishing {
     publications {
+        // Single publication at the JitPack consumer coordinate.
+        // Two publications made JitPack emit a wrapper POM that depends on both
+        // jars; one publication keeps mavenLocal and JitPack on the same artifact.
         mavenJava(MavenPublication) {
-            from components.java
-            artifactId = 'controlflex-api'
-        }
-        // 与 JitPack 对外坐标一致 (com.github.ControlFlexMC:control-flex-api)。
-        // 使 publishToMavenLocal 在本地也能按生产坐标解析，便于先本地验证再发版。
-        jitpackCoords(MavenPublication) {
             from components.java
             groupId = 'com.github.ControlFlexMC'
             artifactId = 'control-flex-api'
