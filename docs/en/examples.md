@@ -121,7 +121,7 @@ public class CfxEpicFightPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
         stateBridge.initialize();
     }
@@ -144,7 +144,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
     compileOnly 'curse.maven:epicfight-405076:7789099'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
@@ -171,3 +171,30 @@ public class GlyphHelper {
     }
 }
 ```
+
+## Example 6: Declaring an Interactive Overlay (0.8.7)
+
+Call when a custom overlay opens and closes. Stick behavior for the class is resolved from ControlFlex compat JSON.
+
+```java
+public class OverlayNotifier {
+
+    public static void onOverlayOpened(Object overlay) {
+        IInteractiveContextRegistrar registrar =
+            ControlFlexApi.getInteractiveContextRegistrar();
+        if (registrar != null) {
+            registrar.notifyOverlayForeground(overlay.getClass().getName());
+        }
+    }
+
+    public static void onOverlayClosed(Object overlay) {
+        IInteractiveContextRegistrar registrar =
+            ControlFlexApi.getInteractiveContextRegistrar();
+        if (registrar != null) {
+            registrar.notifyOverlayBackground(overlay.getClass().getName());
+        }
+    }
+}
+```
+
+> **0.8.7**: these methods were renamed from `notifyForeground` / `notifyBackground`. Mods compiled against 0.8.6 must recompile.

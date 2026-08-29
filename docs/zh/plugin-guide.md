@@ -67,7 +67,7 @@ public void onInstallGuideAssets(ICompatAssetInstaller installer) {
 @Override
 public void onControlFlexReady() {
     // 1. 版本检查
-    if (!requireApiVersion("0.8.6")) return;
+    if (!requireApiVersion("0.8.7")) return;
 
     // 2. API 可用性
     if (!ControlFlexApi.isAvailable()) return;
@@ -124,7 +124,7 @@ config/controlflex/compat/          config/controlflex/guides/
 ## 线程安全
 
 - **所有 API 调用必须在客户端主线程**（Minecraft 游戏循环线程）
-- 例外: `IPlayerStateRegistry.setState()` 可从任意线程调用
+- 例外: `IPlayerStateRegistry.setState()` 和 `IInputInjector` 可从任意线程调用
 - `IControllerState` 是实时视图，**不要跨 tick 缓存引用**
 - `getActiveGameActions()` 返回的 Set 是实时视图，**不要跨 tick 缓存**
 
@@ -169,7 +169,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
 
         IPlayerStateRegistry states = ControlFlexApi.getPlayerStateRegistry();

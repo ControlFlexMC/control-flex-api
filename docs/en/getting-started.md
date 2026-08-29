@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly; provided by ControlFlex at runtime
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -27,7 +27,7 @@ dependencies {
 [[dependencies.your_mod_id]]
     modId = "controlflex"
     mandatory = true
-    versionRange = "[0.8.6,)"
+    versionRange = "[0.8.7,)"
     ordering = "AFTER"
     side = "CLIENT"
 ```
@@ -37,7 +37,7 @@ dependencies {
 ```json
 {
   "depends": {
-    "controlflex": ">=0.8.6"
+    "controlflex": ">=0.8.7"
   }
 }
 ```
@@ -57,12 +57,14 @@ if (!ControlFlexApi.isAvailable()) {
 
 ```
 ControlFlexApi (static entry point)
-├── getActionStateProvider()  → IActionStateProvider  Query action states
-├── getInputProvider()        → IInputProvider        Read controller input
-│                              ├── getControllerState() → IControllerState
-│                              └── getCapabilities()    → IControllerCapabilities
-├── getPlayerStateRegistry()  → IPlayerStateRegistry  Push mod states
-└── isAvailable() / isControllerConnected() / getApiVersion()
+├── getActionStateProvider()            → IActionStateProvider         Query action states
+├── getInputProvider()                  → IInputProvider               Read controller input
+│                                          ├── getControllerState()    → IControllerState
+│                                          └── getCapabilities()       → IControllerCapabilities
+├── getPlayerStateRegistry()            → IPlayerStateRegistry         Push mod states
+├── getInputInjector()                  → IInputInjector               Inject virtual input
+├── getInteractiveContextRegistrar()    → IInteractiveContextRegistrar Overlay foreground/background
+└── isAvailable() / isControllerConnected() / getApiVersion() / reloadGuides()
 ```
 
 ## 4. Two Adaptation Approaches
@@ -92,7 +94,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
 
         // Initialize your bridge logic

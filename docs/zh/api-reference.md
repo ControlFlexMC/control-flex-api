@@ -52,7 +52,7 @@ IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null = 不可�
 ### 工具
 
 ```java
-String getApiVersion()    // e.g. "0.8.6"
+String getApiVersion()    // e.g. "0.8.7"
 void reloadGuides()       // 重新加载 guide 配置
 ```
 
@@ -72,6 +72,12 @@ ButtonName.LEFT_STICK_CLICK, ButtonName.RIGHT_STICK_CLICK
 ButtonName.BACK, ButtonName.START, ButtonName.GUIDE
 ButtonName.PADDLE_1 ~ ButtonName.PADDLE_4
 ButtonName.TOUCHPAD
+
+// 摇杆方向 (for isButtonPressed / IInputInjector.pressButton)
+ButtonName.LEFT_STICK_UP, ButtonName.LEFT_STICK_DOWN
+ButtonName.LEFT_STICK_LEFT, ButtonName.LEFT_STICK_RIGHT
+ButtonName.RIGHT_STICK_UP, ButtonName.RIGHT_STICK_DOWN
+ButtonName.RIGHT_STICK_LEFT, ButtonName.RIGHT_STICK_RIGHT
 
 // 轴 (for getAxisValue)
 ButtonName.AXIS_LEFT_X, ButtonName.AXIS_LEFT_Y
@@ -184,6 +190,8 @@ IControllerCapabilities getCapabilities()       // null = 无连接
 控制器硬件状态实时视图。摇杆 -1.0~1.0，扳机 0.0~1.0。Y 轴正值向下。
 
 ```java
+boolean isConnected()
+
 // 摇杆
 float getLeftStickX() / getLeftStickY()
 float getRightStickX() / getRightStickY()
@@ -226,6 +234,26 @@ boolean isNintendoLayout()            // 任天堂布局 (A/B 互换)
 
 ---
 
+## ControllerType
+
+由 `IControllerCapabilities.getControllerType()` 返回。用于按平台选择按钮图标和布局。
+
+```java
+UNKNOWN, XBOX, PLAYSTATION, NINTENDO_SWITCH, NINTENDO_WII_U,
+GENERIC, STEAM_DECK, GOOGLE_STADIA
+```
+
+---
+
+## InputMode
+
+```java
+KEYBOARD_MOUSE   // 仅键鼠
+MIXED            // 已连接手柄
+```
+
+---
+
 ## IPlayerStateRegistry
 
 桥接模组向 ControlFlex 推送状态，供 compat JSON 中的 `playerState` 条件使用。
@@ -245,7 +273,7 @@ void clearState(String stateKey)                // 删除注册
 虚拟手柄输入注入，供测试工具 / 桥接模组使用。注入状态是**粘性的**（按钮按下后保持，直到释放或清除），并与真实手柄输入一样走正常的按键绑定流水线。
 
 ```java
-void pressButton(String buttonName, boolean pressed)  // ButtonName 常量，如 "buttonA"、"dpadUp"
+void pressButton(String buttonName, boolean pressed)  // ButtonName 常量，如 "buttonA"、"dpadUp"；摇杆方向如 "leftStickUp" 会映射到轴
 void setAxis(String axisName, float value)            // -1.0..1.0；"leftStickX"、"rightTrigger"… 0 表示清除覆盖
 void clearAll()                                       // 释放所有按钮、清零所有轴
 ```

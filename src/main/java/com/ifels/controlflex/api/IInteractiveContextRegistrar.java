@@ -30,6 +30,7 @@ public interface IInteractiveContextRegistrar {
      * auto-clears on phase exit as a fallback.
      *
      * @param className fully-qualified class name of the interactive overlay
+     * @since 0.8.7 renamed from {@code notifyForeground}
      */
     void notifyOverlayForeground(String className);
 
@@ -37,6 +38,7 @@ public interface IInteractiveContextRegistrar {
      * Paired exit API: notifies that the overlay (className) returned to the background.
      *
      * @param className same class name passed to {@link #notifyOverlayForeground(String)}
+     * @since 0.8.7 renamed from {@code notifyBackground}
      */
     void notifyOverlayBackground(String className);
 

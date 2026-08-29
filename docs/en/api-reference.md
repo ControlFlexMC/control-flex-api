@@ -52,7 +52,7 @@ IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null if unavai
 ### Utilities
 
 ```java
-String getApiVersion()    // e.g. "0.8.6"
+String getApiVersion()    // e.g. "0.8.7"
 void reloadGuides()       // Reload guide definitions
 ```
 
@@ -72,6 +72,12 @@ ButtonName.LEFT_STICK_CLICK, ButtonName.RIGHT_STICK_CLICK
 ButtonName.BACK, ButtonName.START, ButtonName.GUIDE
 ButtonName.PADDLE_1 ~ ButtonName.PADDLE_4
 ButtonName.TOUCHPAD
+
+// Stick directions (for isButtonPressed / IInputInjector.pressButton)
+ButtonName.LEFT_STICK_UP, ButtonName.LEFT_STICK_DOWN
+ButtonName.LEFT_STICK_LEFT, ButtonName.LEFT_STICK_RIGHT
+ButtonName.RIGHT_STICK_UP, ButtonName.RIGHT_STICK_DOWN
+ButtonName.RIGHT_STICK_LEFT, ButtonName.RIGHT_STICK_RIGHT
 
 // Axes (for getAxisValue)
 ButtonName.AXIS_LEFT_X, ButtonName.AXIS_LEFT_Y
@@ -167,6 +173,8 @@ IControllerCapabilities getCapabilities()      // null if disconnected
 Live view of controller hardware state. Sticks -1.0~1.0, triggers 0.0~1.0. Y-axis positive = down.
 
 ```java
+boolean isConnected()
+
 // Sticks
 float getLeftStickX() / getLeftStickY()
 float getRightStickX() / getRightStickY()
@@ -207,6 +215,26 @@ boolean isNintendoLayout()
 
 ---
 
+## ControllerType
+
+Returned by `IControllerCapabilities.getControllerType()`. Use for platform-appropriate glyphs and layouts.
+
+```java
+UNKNOWN, XBOX, PLAYSTATION, NINTENDO_SWITCH, NINTENDO_WII_U,
+GENERIC, STEAM_DECK, GOOGLE_STADIA
+```
+
+---
+
+## InputMode
+
+```java
+KEYBOARD_MOUSE   // keyboard and mouse exclusively
+MIXED            // a controller is connected
+```
+
+---
+
 ## IPlayerStateRegistry
 
 Bridge mods push states for use in compat JSON `playerState` conditions.
@@ -226,7 +254,7 @@ void clearState(String stateKey)                // remove registration
 Virtual gamepad input injection for test harnesses / bridge mods. Injected state is **sticky** (a button stays pressed until released or cleared) and flows through the normal binding pipeline like real controller input.
 
 ```java
-void pressButton(String buttonName, boolean pressed)  // ButtonName constants, e.g. "buttonA", "dpadUp"
+void pressButton(String buttonName, boolean pressed)  // ButtonName constants, e.g. "buttonA", "dpadUp"; stick directions like "leftStickUp" map to axes
 void setAxis(String axisName, float value)            // -1.0..1.0; "leftStickX", "rightTrigger", ... 0 removes override
 void clearAll()                                       // release all buttons, zero all axes
 ```

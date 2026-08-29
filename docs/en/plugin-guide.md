@@ -41,7 +41,7 @@ The single initialization callback. All API providers are ready.
 ```java
 @Override
 public void onControlFlexReady() {
-    if (!requireApiVersion("0.8.6")) return;
+    if (!requireApiVersion("0.8.7")) return;
     if (!ControlFlexApi.isAvailable()) return;
 
     // Register event listeners
@@ -89,7 +89,7 @@ Priority: `user > mods > default`
 ## Thread Safety
 
 - **All API calls must be on the client main thread** (Minecraft game loop)
-- Exception: `IPlayerStateRegistry.setState()` can be called from any thread
+- Exceptions: `IPlayerStateRegistry.setState()` and `IInputInjector` can be called from any thread
 - `IControllerState` is a live view — **do not cache across ticks**
 - `getActiveGameActions()` returns a live set — **do not cache across ticks**
 
@@ -124,7 +124,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
         LOGGER.info("Bridge mod ready. API: {}", ControlFlexApi.getApiVersion());
     }

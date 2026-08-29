@@ -127,7 +127,7 @@ public class CfxEpicFightPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
         stateBridge.initialize();
     }
@@ -157,7 +157,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
     compileOnly 'curse.maven:epicfight-405076:7789099'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
@@ -184,3 +184,30 @@ public class GlyphHelper {
     }
 }
 ```
+
+## 示例 6: 声明交互式 Overlay（0.8.7）
+
+在自定义 Overlay 打开 / 关闭时调用。该类名的摇杆行为由 ControlFlex compat JSON 解析。
+
+```java
+public class OverlayNotifier {
+
+    public static void onOverlayOpened(Object overlay) {
+        IInteractiveContextRegistrar registrar =
+            ControlFlexApi.getInteractiveContextRegistrar();
+        if (registrar != null) {
+            registrar.notifyOverlayForeground(overlay.getClass().getName());
+        }
+    }
+
+    public static void onOverlayClosed(Object overlay) {
+        IInteractiveContextRegistrar registrar =
+            ControlFlexApi.getInteractiveContextRegistrar();
+        if (registrar != null) {
+            registrar.notifyOverlayBackground(overlay.getClass().getName());
+        }
+    }
+}
+```
+
+> **0.8.7**: 方法由 `notifyForeground` / `notifyBackground` 改名而来。按 0.8.6 编译的模组需要重新编译。

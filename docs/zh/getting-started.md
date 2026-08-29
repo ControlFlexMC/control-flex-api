@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly，运行时由 ControlFlex 主模组提供
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.6'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -27,7 +27,7 @@ dependencies {
 [[dependencies.your_mod_id]]
     modId = "controlflex"
     mandatory = true
-    versionRange = "[0.8.6,)"
+    versionRange = "[0.8.7,)"
     ordering = "AFTER"
     side = "CLIENT"
 ```
@@ -37,7 +37,7 @@ dependencies {
 ```json
 {
   "depends": {
-    "controlflex": ">=0.8.6"
+    "controlflex": ">=0.8.7"
   }
 }
 ```
@@ -57,12 +57,14 @@ if (!ControlFlexApi.isAvailable()) {
 
 ```
 ControlFlexApi (静态入口)
-├── getActionStateProvider()  → IActionStateProvider  查询动作状态
-├── getInputProvider()        → IInputProvider        读取手柄输入
-│                              ├── getControllerState() → IControllerState
-│                              └── getCapabilities()    → IControllerCapabilities
-├── getPlayerStateRegistry()  → IPlayerStateRegistry  推送模组状态
-└── isAvailable() / isControllerConnected() / getApiVersion()
+├── getActionStateProvider()            → IActionStateProvider         查询动作状态
+├── getInputProvider()                  → IInputProvider               读取手柄输入
+│                                          ├── getControllerState()    → IControllerState
+│                                          └── getCapabilities()       → IControllerCapabilities
+├── getPlayerStateRegistry()            → IPlayerStateRegistry         推送模组状态
+├── getInputInjector()                  → IInputInjector               注入虚拟输入
+├── getInteractiveContextRegistrar()    → IInteractiveContextRegistrar Overlay 前后台
+└── isAvailable() / isControllerConnected() / getApiVersion() / reloadGuides()
 ```
 
 ## 4. 两种适配方式
@@ -92,7 +94,7 @@ public class MyPlugin implements IControlFlexPlugin {
 
     @Override
     public void onControlFlexReady() {
-        if (!requireApiVersion("0.8.6")) return;
+        if (!requireApiVersion("0.8.7")) return;
         if (!ControlFlexApi.isAvailable()) return;
 
         // 初始化你的桥接逻辑
