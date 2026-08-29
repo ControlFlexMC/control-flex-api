@@ -116,5 +116,5 @@ That's it — no manual registration. ControlFlex discovers plugins automaticall
 
 - [Plugin Guide](plugin-guide.md) — Full lifecycle, asset installation
 - [API Reference](api-reference.md) — Complete interface documentation
-- [Compat JSON Config](compat-config.md) — Adapt mods without code
+- [Compat JSON Config](https://github.com/ControlFlexMC/cfx-compat-configs/blob/main/docs/01.config-field-reference.md) — Adapt mods without code
 - [Examples](examples.md) — EpicFight bridge and more

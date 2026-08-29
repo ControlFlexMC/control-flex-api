@@ -11,7 +11,7 @@
 | [快速开始](docs/zh/getting-started.md) | 项目配置、API 总览、第一个插件 |
 | [API 参考](docs/zh/api-reference.md) | 所有接口的完整签名和说明 |
 | [Plugin 开发指南](docs/zh/plugin-guide.md) | 生命周期、资源安装、完整模板 |
-| [Compat JSON 配置](docs/zh/compat-config.md) | 无需代码即可适配模组按键 |
+| [Compat JSON 配置](https://github.com/ControlFlexMC/cfx-compat-configs/blob/main/docs/01.config-field-reference_ZH.md) | 无需代码即可适配模组按键 |
 | [完整示例](docs/zh/examples.md) | EpicFight 桥接等端到端代码 |
 
 ## 快速开始

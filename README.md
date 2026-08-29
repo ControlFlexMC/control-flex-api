@@ -11,7 +11,7 @@ Public API for building ControlFlex bridge mods — read controller input, query
 | [Getting Started](docs/en/getting-started.md) | Project setup, API overview, first plugin |
 | [API Reference](docs/en/api-reference.md) | Complete interface signatures and descriptions |
 | [Plugin Guide](docs/en/plugin-guide.md) | Lifecycle, asset installation, full template |
-| [Compat JSON Config](docs/en/compat-config.md) | Adapt mod keys without writing code |
+| [Compat JSON Config](https://github.com/ControlFlexMC/cfx-compat-configs/blob/main/docs/01.config-field-reference.md) | Adapt mod keys without writing code |
 | [Examples](docs/en/examples.md) | EpicFight bridge and other end-to-end code |
 
 ## Quick Start

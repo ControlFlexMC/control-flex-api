@@ -116,5 +116,5 @@ com.example.mymod.MyPlugin
 
 - [Plugin 开发指南](plugin-guide.md) — 生命周期详解、资源安装
 - [API 参考](api-reference.md) — 完整接口文档
-- [Compat JSON 配置](compat-config.md) — 不写代码适配模组
+- [Compat JSON 配置](https://github.com/ControlFlexMC/cfx-compat-configs/blob/main/docs/01.config-field-reference_ZH.md) — 不写代码适配模组
 - [完整示例](examples.md) — EpicFight 桥接模组
