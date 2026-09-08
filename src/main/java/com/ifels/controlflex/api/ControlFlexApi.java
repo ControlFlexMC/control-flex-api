@@ -24,7 +24,21 @@ public final class ControlFlexApi {
     private static volatile IPlayerStateRegistry playerStateRegistry;
     private static volatile GuideReloadCallback guideReloadCallback;
     private static volatile IInteractiveContextRegistrar interactiveContextRegistrar;
-    private static volatile String apiVersion;
+
+    /**
+     * API version of this library (from {@code api_version} in control-flex-api).
+     *
+     * <p>Not a compile-time constant, so bridge mods read the value from the
+     * API classes ControlFlex actually shipped rather than a string inlined
+     * at compile time.</p>
+     *
+     * @since 0.8.8
+     */
+    public static final String VERSION;
+
+    static {
+        VERSION = ApiVersion.VALUE;
+    }
 
     private ControlFlexApi() {}
 
@@ -93,10 +107,14 @@ public final class ControlFlexApi {
     }
 
     /**
-     * Get the API version string (e.g., "0.8.7").
+     * Get the API version string (e.g., "0.8.8").
+     *
+     * <p>This is the version compiled into the API classes ControlFlex ships.
+     * Bridge mods should call this (or {@link IControlFlexPlugin#requireApiVersion(String)})
+     * at runtime — it does not depend on ControlFlex injecting a version.</p>
      */
     public static String getApiVersion() {
-        return apiVersion;
+        return VERSION;
     }
 
     /**
@@ -200,9 +218,12 @@ public final class ControlFlexApi {
         interactiveContextRegistrar = registrar;
     }
 
-    /** @internal */
+    /**
+     * @internal Kept for binary compatibility with ControlFlex. The library
+     * version is {@link #VERSION}; this method does not change {@link #getApiVersion()}.
+     */
     public static void setApiVersion(String version) {
-        apiVersion = version;
+        // no-op: version is compiled into VERSION
     }
 
     /** @internal */

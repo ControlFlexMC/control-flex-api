@@ -62,6 +62,25 @@ public interface IControlFlexPlugin {
     default void onInstallGuideAssets(ICompatAssetInstaller installer) {}
 
     /**
+     * Optionally provide a camera look consumer (e.g., bridge mods whose
+     * camera is taken over by Epic Fight).
+     *
+     * <p>When a non-null consumer is returned, ControlFlex asks
+     * {@link ICameraLookConsumer#consumeLook} before writing player rotation
+     * on direct / smooth-direct look; returning true skips the write
+     * (typically the consumer forwards the delta to the taking-over mod's
+     * camera API). "Simulated mouse movement" is unaffected (it goes through
+     * the vanilla mouse pipeline, which the taking-over mod intercepts
+     * itself).</p>
+     *
+     * @return camera consumer, or null (default: no takeover)
+     * @since 0.8.8
+     */
+    default ICameraLookConsumer cameraLookConsumer() {
+        return null;
+    }
+
+    /**
      * Convenience method: check whether the ControlFlex API version meets
      * a minimum requirement. Logs a warning and returns false if not.
      *

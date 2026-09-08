@@ -1,7 +1,7 @@
 package com.ifels.controlflex.api;
 
 /**
- * Interactive-context registrar (spec 主 §10): mods actively notify ControlFlex
+ * Interactive-context registrar (spec §10): mods actively notify ControlFlex
  * when they bring an interactive <b>overlay</b> to the <b>foreground</b> (declared
  * by its class name) and when it returns to the <b>background</b>. ControlFlex
  * records the class as an active overlay and switches stick behavior during the

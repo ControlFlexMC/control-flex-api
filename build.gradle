@@ -15,12 +15,55 @@ base {
 version = api_version
 group = maven_group
 
+def generatedApiVersionDir = layout.buildDirectory.dir('generated/sources/apiVersion')
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedApiVersionDir
+        }
+    }
+}
+
+tasks.register('generateApiVersion') {
+    def version = providers.provider { api_version.toString() }
+    inputs.property('apiVersion', version)
+    outputs.dir generatedApiVersionDir
+    doLast {
+        def escaped = version.get().replace('\\', '\\\\').replace('"', '\\"')
+        def pkgDir = new File(generatedApiVersionDir.get().asFile, 'com/ifels/controlflex/api')
+        pkgDir.mkdirs()
+        new File(pkgDir, 'ApiVersion.java').text = """\
+package com.ifels.controlflex.api;
+
+final class ApiVersion {
+    static final String VALUE = "${escaped}";
+
+    private ApiVersion() {}
+}
+"""
+    }
+}
+
+tasks.named('compileJava', JavaCompile) {
+    dependsOn 'generateApiVersion'
+}
+
+tasks.named('sourcesJar', Jar) {
+    dependsOn 'generateApiVersion'
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     compileOnly 'org.jetbrains:annotations:24.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
 }
 
 publishing {
