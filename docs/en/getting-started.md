@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly; provided by ControlFlex at runtime
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.9'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```

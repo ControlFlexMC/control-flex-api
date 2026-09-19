@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly，运行时由 ControlFlex 主模组提供
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.9'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```

@@ -1,7 +1,7 @@
 # API 参考
 
 > 包路径: `com.ifels.controlflex.api`  
-> 版本: 0.8.7  
+> 版本: 0.8.9  
 > 线程模型: 所有方法必须在客户端主线程调用（除非特别标注）
 
 ## 类型清单
@@ -52,7 +52,7 @@ IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null = 不可�
 ### 工具
 
 ```java
-String getApiVersion()    // e.g. "0.8.7"
+String getApiVersion()    // e.g. "0.8.9"
 void reloadGuides()       // 重新加载 guide 配置
 ```
 

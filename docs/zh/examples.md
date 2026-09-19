@@ -157,7 +157,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.7'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.9'
     compileOnly 'curse.maven:epicfight-405076:7789099'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
