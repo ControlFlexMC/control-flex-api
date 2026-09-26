@@ -98,19 +98,10 @@ public interface IControlFlexPlugin {
         String[] minParts = minVersion.split("\\.");
         int len = Math.max(curParts.length, minParts.length);
         for (int i = 0; i < len; i++) {
-            int c = i < curParts.length ? parseVersionPart(curParts[i]) : 0;
-            int m = i < minParts.length ? parseVersionPart(minParts[i]) : 0;
+            int c = i < curParts.length ? VersionSupport.parseVersionPart(curParts[i]) : 0;
+            int m = i < minParts.length ? VersionSupport.parseVersionPart(minParts[i]) : 0;
             if (c != m) return c >= m;
         }
         return true;
-    }
-
-    /** Parse a version segment; non-numeric segments are treated as 0. */
-    private static int parseVersionPart(String part) {
-        try {
-            return Integer.parseInt(part);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
     }
 }

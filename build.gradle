@@ -4,8 +4,26 @@ plugins {
 }
 
 java {
+    // Build JDK (toolchain); the published bytecode level is api_target_java below.
     toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
     withSourcesJar()
+}
+
+// Published bytecode target. `release` makes javac validate against the Java 8 API and
+// emit class file 52; source/targetCompatibility drive the published
+// org.gradle.jvm.version variant attribute so a Java 16 consumer (dev/1.17.1) can
+// resolve this artifact.
+def apiTarget = JavaVersion.toVersion(api_target_java)
+sourceCompatibility = apiTarget
+targetCompatibility = apiTarget
+
+// Only the *published* sources are held to the Java 8 language/API level; tests run on the
+// build JDK and may use its full API.
+tasks.named('compileJava', JavaCompile) {
+    options.release = api_target_java as int
+}
+tasks.named('compileTestJava', JavaCompile) {
+    options.release = java_version as int
 }
 
 base {
