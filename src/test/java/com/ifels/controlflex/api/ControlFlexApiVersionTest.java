@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +17,7 @@ class ControlFlexApiVersionTest {
     @Test
     void versionFieldMatchesGradleApiVersion() throws IOException {
         assertEquals(gradleApiVersion(), ControlFlexApi.VERSION);
-        assertFalse(ControlFlexApi.VERSION.isBlank());
+        assertFalse(ControlFlexApi.VERSION.trim().isEmpty());
     }
 
     @Test
@@ -31,13 +32,13 @@ class ControlFlexApiVersionTest {
     }
 
     private static String gradleApiVersion() throws IOException {
-        Path propsFile = Path.of("gradle.properties");
+        Path propsFile = Paths.get("gradle.properties");
         Properties properties = new Properties();
         try (InputStream in = Files.newInputStream(propsFile)) {
             properties.load(in);
         }
         String version = properties.getProperty("api_version");
-        if (version == null || version.isBlank()) {
+        if (version == null || version.trim().isEmpty()) {
             throw new IllegalStateException("api_version missing in gradle.properties");
         }
         return version.trim();

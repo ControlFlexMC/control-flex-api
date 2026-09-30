@@ -1,2 +1,7 @@
+# jitpack.yml — JitPack build configuration for control-flex-api
+#
+# The published artifact is Java 8 bytecode (class file 52) and must stay
+# buildable on a JDK 8 toolchain, so JitPack builds with openjdk8.
+
 jdk:
-  - openjdk21
+  - openjdk8

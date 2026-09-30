@@ -3,8 +3,39 @@ plugins {
     id 'maven-publish'
 }
 
+// ─────────────────────────────────────────────
+// Java Compatibility
+//
+// The published API must stay loadable on a Java 8 JVM, so classes compile for
+// major 52 against the Java 8 API set.
+//
+// On JDK 9+ `--release 8` does both: it targets 1.8 *and* checks against the
+// Java 8 signature table, so a Java 9+ API (String.isBlank, Path.of, List.of)
+// fails the build here instead of throwing NoSuchMethodError at runtime.
+// `--release` does not exist on JDK 8 and is not needed there — that javac's
+// own rt.jar already is the Java 8 API set.
+// ─────────────────────────────────────────────
+def javaSourceCompat = JavaVersion.toVersion(findProperty('javaSourceCompatibility') ?: '1.8')
+def javaTargetCompat = JavaVersion.toVersion(findProperty('javaTargetCompatibility') ?: '1.8')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Targeting 8 is deliberate, so javac's "source value 8 is obsolete"
+    // warnings are noise.
+    options.compilerArgs << '-Xlint:-options'
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.release = javaTargetCompat.majorVersion.toInteger()
+    }
+}
+
+if (!JavaVersion.current().isJava9Compatible()) {
+    java {
+        sourceCompatibility = javaSourceCompat
+        targetCompatibility = javaTargetCompat
+    }
+}
+
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
     withSourcesJar()
 }
 

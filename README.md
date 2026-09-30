@@ -27,6 +27,8 @@ dependencies {
 }
 ```
 
+> The published jar is Java 8 bytecode (class file 52) and loads on any JVM 8+.
+
 ```java
 import com.ifels.controlflex.api.*;
 

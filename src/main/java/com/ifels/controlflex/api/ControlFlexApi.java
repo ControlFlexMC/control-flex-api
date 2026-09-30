@@ -118,6 +118,23 @@ public final class ControlFlexApi {
     }
 
     /**
+     * Parse one dot-separated version segment. Non-numeric segments (for example
+     * a {@code -SNAPSHOT} suffix) count as 0.
+     *
+     * <p>Package-private, and used by
+     * {@link IControlFlexPlugin#requireApiVersion(String)}. It cannot live on
+     * that interface: a private interface method is a Java 9 feature, so it
+     * would break the Java 8 target.</p>
+     */
+    static int parseVersionPart(String part) {
+        try {
+            return Integer.parseInt(part);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    /**
      * Reload guide definitions from {@code config/controlflex/guides/}.
      * Bridge mods should call this after installing or updating bundled guide JSON.
      */

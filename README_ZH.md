@@ -27,6 +27,8 @@ dependencies {
 }
 ```
 
+> 发布的 jar 为 Java 8 字节码（class file 52），任何 JVM 8+ 均可加载。
+
 ```java
 import com.ifels.controlflex.api.*;
 
