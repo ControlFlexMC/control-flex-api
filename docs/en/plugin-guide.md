@@ -89,7 +89,7 @@ Priority: `user > mods > default`
 ## Thread Safety
 
 - **All API calls must be on the client main thread** (Minecraft game loop)
-- Exceptions: `IPlayerStateRegistry.setState()` and `IInputInjector` can be called from any thread
+- Exception: `IPlayerStateRegistry.setState()` can be called from any thread
 - `IControllerState` is a live view — **do not cache across ticks**
 - `getActiveGameActions()` returns a live set — **do not cache across ticks**
 

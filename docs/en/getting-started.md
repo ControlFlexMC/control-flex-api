@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly; provided by ControlFlex at runtime
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.9'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.9.0'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -62,7 +62,6 @@ ControlFlexApi (static entry point)
 │                                          ├── getControllerState()    → IControllerState
 │                                          └── getCapabilities()       → IControllerCapabilities
 ├── getPlayerStateRegistry()            → IPlayerStateRegistry         Push mod states
-├── getInputInjector()                  → IInputInjector               Inject virtual input
 ├── getInteractiveContextRegistrar()    → IInteractiveContextRegistrar Overlay foreground/background
 └── isAvailable() / isControllerConnected() / getApiVersion() / reloadGuides()
 ```

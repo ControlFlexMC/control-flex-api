@@ -1,7 +1,7 @@
 # API 参考
 
 > 包路径: `com.ifels.controlflex.api`  
-> 版本: 0.8.9  
+> 版本: 0.9.0  
 > 线程模型: 所有方法必须在客户端主线程调用（除非特别标注）
 
 ## 类型清单
@@ -17,10 +17,11 @@
 | `IControllerState` | 控制器硬件状态（实时视图） |
 | `IControllerCapabilities` | 控制器硬件能力 |
 | `IPlayerStateRegistry` | 第三方模组状态推送 |
-| `IInputInjector` | 虚拟手柄输入注入（测试工具） |
 | `IInteractiveContextRegistrar` | 交互式 Overlay 前后台声明 |
 | `InputMode` | 输入模式（KEYBOARD_MOUSE / MIXED） |
 | `ControllerType` | 控制器类型枚举 |
+
+> **0.9.0 破坏性变更**: 移除 `IInputInjector` 接口及 `ControlFlexApi.getInputInjector()` / `setInputInjector()`；依赖虚拟手柄输入注入的测试工具请继续使用 0.8.x。
 
 ---
 
@@ -45,14 +46,13 @@ boolean isControllerConnected()     // 有控制器连接
 IActionStateProvider getActionStateProvider()    // null = 不可用
 IInputProvider getInputProvider()                // null = 不可用
 IPlayerStateRegistry getPlayerStateRegistry()    // null = 不可用
-IInputInjector getInputInjector()                // null = 不可用（测试工具）
 IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null = 不可用
 ```
 
 ### 工具
 
 ```java
-String getApiVersion()    // e.g. "0.8.9"
+String getApiVersion()    // e.g. "0.9.0"
 void reloadGuides()       // 重新加载 guide 配置
 ```
 
@@ -73,7 +73,7 @@ ButtonName.BACK, ButtonName.START, ButtonName.GUIDE
 ButtonName.PADDLE_1 ~ ButtonName.PADDLE_4
 ButtonName.TOUCHPAD
 
-// 摇杆方向 (for isButtonPressed / IInputInjector.pressButton)
+// 摇杆方向 (for isButtonPressed)
 ButtonName.LEFT_STICK_UP, ButtonName.LEFT_STICK_DOWN
 ButtonName.LEFT_STICK_LEFT, ButtonName.LEFT_STICK_RIGHT
 ButtonName.RIGHT_STICK_UP, ButtonName.RIGHT_STICK_DOWN
@@ -268,20 +268,6 @@ void clearState(String stateKey)                // 删除注册
 
 ---
 
-## IInputInjector
-
-虚拟手柄输入注入，供测试工具 / 桥接模组使用。注入状态是**粘性的**（按钮按下后保持，直到释放或清除），并与真实手柄输入一样走正常的按键绑定流水线。
-
-```java
-void pressButton(String buttonName, boolean pressed)  // ButtonName 常量，如 "buttonA"、"dpadUp"；摇杆方向如 "leftStickUp" 会映射到轴
-void setAxis(String axisName, float value)            // -1.0..1.0；"leftStickX"、"rightTrigger"… 0 表示清除覆盖
-void clearAll()                                       // 释放所有按钮、清零所有轴
-```
-
-**线程安全**: 实现必须可跨线程调用；状态在客户端 tick 上原子应用。
-
----
-
 ## IInteractiveContextRegistrar
 
 声明交互式 Overlay：**前台**表示交互式 Overlay 打开，**后台**表示其关闭。ControlFlex 据此将该类名记为当前活跃 Overlay，并在 OVERLAY 相位期间切换摇杆行为；场景退出时也会自动清除作为兜底。
@@ -310,5 +296,4 @@ void clearAll()                                   // 模组卸载 / 退出世界
 | `IControllerCapabilities` | 客户端主线程 |
 | `IPlayerStateRegistry.setState()` | **任意线程** |
 | `IPlayerStateRegistry.getState()` | 客户端主线程 |
-| `IInputInjector` | **任意线程**（在客户端 tick 上原子应用） |
 | `IInteractiveContextRegistrar` | 客户端主线程 |

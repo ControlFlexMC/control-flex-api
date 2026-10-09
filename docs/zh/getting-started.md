@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     // ControlFlex API — compileOnly，运行时由 ControlFlex 主模组提供
-    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.8.9'
+    compileOnly 'com.github.ControlFlexMC:control-flex-api:0.9.0'
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 ```
@@ -62,7 +62,6 @@ ControlFlexApi (静态入口)
 │                                          ├── getControllerState()    → IControllerState
 │                                          └── getCapabilities()       → IControllerCapabilities
 ├── getPlayerStateRegistry()            → IPlayerStateRegistry         推送模组状态
-├── getInputInjector()                  → IInputInjector               注入虚拟输入
 ├── getInteractiveContextRegistrar()    → IInteractiveContextRegistrar Overlay 前后台
 └── isAvailable() / isControllerConnected() / getApiVersion() / reloadGuides()
 ```

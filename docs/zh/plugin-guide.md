@@ -124,7 +124,7 @@ config/controlflex/compat/          config/controlflex/guides/
 ## 线程安全
 
 - **所有 API 调用必须在客户端主线程**（Minecraft 游戏循环线程）
-- 例外: `IPlayerStateRegistry.setState()` 和 `IInputInjector` 可从任意线程调用
+- 例外: `IPlayerStateRegistry.setState()` 可从任意线程调用
 - `IControllerState` 是实时视图，**不要跨 tick 缓存引用**
 - `getActiveGameActions()` 返回的 Set 是实时视图，**不要跨 tick 缓存**
 

@@ -1,7 +1,7 @@
 # API Reference
 
 > Package: `com.ifels.controlflex.api`  
-> Version: 0.8.9  
+> Version: 0.9.0  
 > Thread model: All methods must be called from the client thread unless noted otherwise
 
 ## Type List
@@ -17,10 +17,11 @@
 | `IControllerState` | Controller hardware state (live view) |
 | `IControllerCapabilities` | Controller hardware capabilities |
 | `IPlayerStateRegistry` | Third-party mod state push |
-| `IInputInjector` | Virtual gamepad input injection (test harnesses) |
 | `IInteractiveContextRegistrar` | Interactive overlay foreground/background declaration |
 | `InputMode` | Input mode (KEYBOARD_MOUSE / MIXED) |
 | `ControllerType` | Controller type enum |
+
+> **0.9.0 breaking change**: the `IInputInjector` interface and `ControlFlexApi.getInputInjector()` / `setInputInjector()` were removed. Harnesses that need synthetic gamepad input must stay on 0.8.x.
 
 ---
 
@@ -45,14 +46,13 @@ boolean isControllerConnected()     // A controller is connected
 IActionStateProvider getActionStateProvider()    // null if unavailable
 IInputProvider getInputProvider()                // null if unavailable
 IPlayerStateRegistry getPlayerStateRegistry()    // null if unavailable
-IInputInjector getInputInjector()                // null if unavailable (test harnesses)
 IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null if unavailable
 ```
 
 ### Utilities
 
 ```java
-String getApiVersion()    // e.g. "0.8.9"
+String getApiVersion()    // e.g. "0.9.0"
 void reloadGuides()       // Reload guide definitions
 ```
 
@@ -73,7 +73,7 @@ ButtonName.BACK, ButtonName.START, ButtonName.GUIDE
 ButtonName.PADDLE_1 ~ ButtonName.PADDLE_4
 ButtonName.TOUCHPAD
 
-// Stick directions (for isButtonPressed / IInputInjector.pressButton)
+// Stick directions (for isButtonPressed)
 ButtonName.LEFT_STICK_UP, ButtonName.LEFT_STICK_DOWN
 ButtonName.LEFT_STICK_LEFT, ButtonName.LEFT_STICK_RIGHT
 ButtonName.RIGHT_STICK_UP, ButtonName.RIGHT_STICK_DOWN
@@ -249,20 +249,6 @@ void clearState(String stateKey)                // remove registration
 
 ---
 
-## IInputInjector
-
-Virtual gamepad input injection for test harnesses / bridge mods. Injected state is **sticky** (a button stays pressed until released or cleared) and flows through the normal binding pipeline like real controller input.
-
-```java
-void pressButton(String buttonName, boolean pressed)  // ButtonName constants, e.g. "buttonA", "dpadUp"; stick directions like "leftStickUp" map to axes
-void setAxis(String axisName, float value)            // -1.0..1.0; "leftStickX", "rightTrigger", ... 0 removes override
-void clearAll()                                       // release all buttons, zero all axes
-```
-
-**Thread safety**: implementations must be safe to call from any thread; state is applied atomically on the client tick.
-
----
-
 ## IInteractiveContextRegistrar
 
 Declare interactive overlays: **foreground** when an interactive overlay opens, **background** when it closes. ControlFlex records the class as the active overlay and switches stick behavior for the OVERLAY phase while it is active, and auto-clears on phase exit as a fallback.
@@ -291,5 +277,4 @@ void clearAll()                                   // fallback for mod unload / w
 | `IControllerCapabilities` | Client main thread |
 | `IPlayerStateRegistry.setState()` | **Any thread** |
 | `IPlayerStateRegistry.getState()` | Client main thread |
-| `IInputInjector` | **Any thread** (applied atomically on client tick) |
 | `IInteractiveContextRegistrar` | Client main thread |

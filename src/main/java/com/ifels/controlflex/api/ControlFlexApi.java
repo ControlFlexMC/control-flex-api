@@ -20,7 +20,6 @@ public final class ControlFlexApi {
 
     private static volatile IActionStateProvider actionStateProvider;
     private static volatile IInputProvider inputProvider;
-    private static volatile IInputInjector inputInjector;
     private static volatile IPlayerStateRegistry playerStateRegistry;
     private static volatile GuideReloadCallback guideReloadCallback;
     private static volatile IInteractiveContextRegistrar interactiveContextRegistrar;
@@ -72,19 +71,6 @@ public final class ControlFlexApi {
      */
     public static IInputProvider getInputProvider() {
         return inputProvider;
-    }
-
-    /**
-     * Get the virtual gamepad input injector for synthesizing controller input.
-     *
-     * <p>Returns null when ControlFlex is not available. Injectors are
-     * intended for test harnesses / bridge mods; see {@link IInputInjector}.</p>
-     *
-     * @return injector instance, or null if ControlFlex is not available
-     * @since 0.8.6
-     */
-    public static IInputInjector getInputInjector() {
-        return inputInjector;
     }
 
     /**
@@ -189,21 +175,6 @@ public final class ControlFlexApi {
                 "Use ControlFlexApi.getXxx() for public API access.");
         }
         inputProvider = provider;
-    }
-
-    /** @internal */
-    public static void setInputInjector(IInputInjector injector) {
-        Objects.requireNonNull(injector,
-            "[ControlFlexApi] InputInjector must not be null. " +
-            "This is an internal method — do not call from bridge mods.");
-        if (inputInjector != null) {
-            throw new IllegalStateException(
-                "[ControlFlexApi] InputInjector already set. " +
-                "ControlFlexApi.setXxx methods are internal. " +
-                "Use ControlFlexApi.getXxx() for public API access.");
-        }
-        verifyControlFlexImpl(injector, "InputInjector");
-        inputInjector = injector;
     }
 
     /** @internal */
