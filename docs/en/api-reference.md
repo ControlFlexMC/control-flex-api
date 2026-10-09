@@ -1,7 +1,7 @@
 # API Reference
 
 > Package: `com.ifels.controlflex.api`  
-> Version: 0.9.0  
+> Version: 0.9.2  
 > Thread model: All methods must be called from the client thread unless noted otherwise
 
 ## Type List
@@ -52,7 +52,7 @@ IInteractiveContextRegistrar getInteractiveContextRegistrar()  // null if unavai
 ### Utilities
 
 ```java
-String getApiVersion()    // e.g. "0.9.0"
+String getApiVersion()    // e.g. "0.9.2"
 void reloadGuides()       // Reload guide definitions
 ```
 
