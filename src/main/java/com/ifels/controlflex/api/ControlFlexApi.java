@@ -20,6 +20,9 @@ public final class ControlFlexApi {
 
     private static volatile IActionStateProvider actionStateProvider;
     private static volatile IInputProvider inputProvider;
+    private static volatile IActionBindingProvider actionBindingProvider;
+    private static volatile ICursorController cursorController;
+    private static volatile IScreenHandlerRegistry screenHandlerRegistry;
     private static volatile IPlayerStateRegistry playerStateRegistry;
     private static volatile GuideReloadCallback guideReloadCallback;
     private static volatile IInteractiveContextRegistrar interactiveContextRegistrar;
@@ -71,6 +74,44 @@ public final class ControlFlexApi {
      */
     public static IInputProvider getInputProvider() {
         return inputProvider;
+    }
+
+    /**
+     * Get the action binding provider for "which button is bound, what glyph to draw".
+     *
+     * <p>Use this to render on-screen key hints for another mod's actions: one call
+     * returns the bound buttons together with drawable glyph rectangles, already
+     * resolved for the active controller skin and the currently open screen.</p>
+     *
+     * @return provider instance, or null if ControlFlex is not available or too old
+     * @since 0.10.0
+     */
+    public static IActionBindingProvider getActionBindingProvider() {
+        return actionBindingProvider;
+    }
+
+    /**
+     * Get the cursor controller for placing the virtual mouse pointer.
+     *
+     * @return controller instance, or null if ControlFlex is not available or too old
+     * @since 0.11.0
+     */
+    public static ICursorController getCursorController() {
+        return cursorController;
+    }
+
+    /**
+     * Get the per-screen handler registry (back press and HUD toggle for one screen class).
+     *
+     * <p>Registering a handler lets a bridge consume the back press on its own screen instead of
+     * letting ControlFlex send Escape, and receive the HUD visibility its screen should render
+     * with. One handler per screen class, exact class-name matching.</p>
+     *
+     * @return registry instance, or null if ControlFlex is not available or too old
+     * @since 0.13.0 (replaces the 0.12.0 getGuiBackHandlerRegistry, which was never published)
+     */
+    public static IScreenHandlerRegistry getScreenHandlerRegistry() {
+        return screenHandlerRegistry;
     }
 
     /**
@@ -175,6 +216,51 @@ public final class ControlFlexApi {
                 "Use ControlFlexApi.getXxx() for public API access.");
         }
         inputProvider = provider;
+    }
+
+    /** @internal */
+    public static void setActionBindingProvider(IActionBindingProvider provider) {
+        Objects.requireNonNull(provider,
+            "[ControlFlexApi] ActionBindingProvider must not be null. " +
+            "This is an internal method — do not call from bridge mods.");
+        if (actionBindingProvider != null) {
+            throw new IllegalStateException(
+                "[ControlFlexApi] ActionBindingProvider already set. " +
+                "ControlFlexApi.setXxx methods are internal. " +
+                "Use ControlFlexApi.getXxx() for public API access.");
+        }
+        verifyControlFlexImpl(provider, "ActionBindingProvider");
+        actionBindingProvider = provider;
+    }
+
+    /** @internal */
+    public static void setCursorController(ICursorController controller) {
+        Objects.requireNonNull(controller,
+            "[ControlFlexApi] CursorController must not be null. " +
+            "This is an internal method — do not call from bridge mods.");
+        if (cursorController != null) {
+            throw new IllegalStateException(
+                "[ControlFlexApi] CursorController already set. " +
+                "ControlFlexApi.setXxx methods are internal. " +
+                "Use ControlFlexApi.getXxx() for public API access.");
+        }
+        verifyControlFlexImpl(controller, "CursorController");
+        cursorController = controller;
+    }
+
+    /** @internal */
+    public static void setScreenHandlerRegistry(IScreenHandlerRegistry registry) {
+        Objects.requireNonNull(registry,
+            "[ControlFlexApi] ScreenHandlerRegistry must not be null. " +
+            "This is an internal method — do not call from bridge mods.");
+        if (screenHandlerRegistry != null) {
+            throw new IllegalStateException(
+                "[ControlFlexApi] ScreenHandlerRegistry already set. " +
+                "ControlFlexApi.setXxx methods are internal. " +
+                "Use ControlFlexApi.getXxx() for public API access.");
+        }
+        verifyControlFlexImpl(registry, "ScreenHandlerRegistry");
+        screenHandlerRegistry = registry;
     }
 
     /** @internal */
