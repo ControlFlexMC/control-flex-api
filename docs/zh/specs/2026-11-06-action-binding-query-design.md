@@ -1,5 +1,6 @@
 # 动作绑定查询 API 设计（Action Binding Query）
 
+> 英文版：[English](../../en/specs/2026-11-06-action-binding-query-design.md)
 **状态：** 接口已落地（两轮自审后修订）；主仓库实现待做
 **分支：** 待建（建议 `feat/action-binding-query`，从 `main` 拉出）
 **目标版本：** `0.9.2.1`（成文时记作 `0.10.0`，编号已归一）
