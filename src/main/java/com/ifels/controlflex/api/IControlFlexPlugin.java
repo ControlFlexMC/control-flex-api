@@ -81,6 +81,46 @@ public interface IControlFlexPlugin {
     }
 
     /**
+     * Declare actions that only ControlFlex sees, before the binding profile is loaded.
+     *
+     * <p>Called after {@link #onInstallCompatConfigs} / {@link #onInstallGuideAssets} and before
+     * {@link #onControlFlexReady()}. The registrar is valid for the duration of this call only;
+     * keeping a reference and registering later is a programming error and throws.</p>
+     *
+     * <p>Registered actions are not {@code KeyMapping}s: they never reach the vanilla controls
+     * screen and never write global key state. Their bindings live in ControlFlex's own storage,
+     * and their default values are consulted only while the user has not set one.</p>
+     *
+     * @param registrar registration window, valid only inside this callback
+     * @since 0.9.2.2
+     */
+    default void onRegisterActions(IActionRegistrar registrar) {
+    }
+
+    /**
+     * One of this plugin's registered actions fired.
+     *
+     * <p>Called on the client main thread inside the input tick, before the frame that depends on
+     * it is rendered. Fires on the activation edge: once per press for one-shot modes, once when
+     * a hold starts, once per toggle-on. Exceptions are isolated and logged.</p>
+     *
+     * @since 0.9.2.2
+     */
+    default void onActionTriggered(ActionTrigger trigger) {
+    }
+
+    /**
+     * A hold-style or latching registered action became inactive.
+     *
+     * <p>One-shot modes (press, tap, release, double press, …) never produce this callback.</p>
+     *
+     * @param actionId the action that ended
+     * @since 0.9.2.2
+     */
+    default void onActionReleased(String actionId) {
+    }
+
+    /**
      * Convenience method: check whether the ControlFlex API version meets
      * a minimum requirement. Logs a warning and returns false if not.
      *
